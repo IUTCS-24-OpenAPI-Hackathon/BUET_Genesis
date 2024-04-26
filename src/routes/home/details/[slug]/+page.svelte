@@ -5,6 +5,7 @@
 	import missing from '$lib/images/missing-svgrepo-com.svg';
 	import { page } from '$app/stores';
 	const { slug } = $page.params;
+	import deafaultImage from '$lib/images/default.jpg';
 
 	export let data;
 	let features = data.res.features;
@@ -228,14 +229,17 @@
 			<p class="text-[30px]">Reviews:</p>
 			<div>
 				{#each data.allReviews as review, index}
-					<div class="border-2 shadow-sm m-2 my-3 p-4">
-						<div class="flex items-center">
-							<p class="text-[28px] font-bold mr-2">{review.reviewerName}</p>
-
-							<div class="flex">
+					<div class="flex my-5">
+						<div class="mr-3 flex-shrink-0">
+							<img class="mt-2 h-8 w-8 rounded-full sm:h-10 sm:w-10" src={deafaultImage} alt="" />
+						</div>
+						<div class="flex-1 rounded-lg border px-4 py-2 leading-relaxed sm:px-6 sm:py-4">
+							<strong>{review.reviewerName}</strong>
+							<span class="text-xs text-gray-400">{review.createdAt.toString().split('T')[0]}</span>
+							<span class="flex flex-row">
 								{#each Array.from({ length: review.star }) as _, index}
 									<svg
-										class="star h-5 w-5 fill-current star-filled"
+										class="star h-4 w-4 fill-current star-filled"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 									>
@@ -246,7 +250,7 @@
 								{/each}
 								{#each Array.from({ length: 5 - review.star }) as _, index}
 									<svg
-										class="star h-5 w-5 fill-current star_"
+										class="star h-4 w-4 fill-current star_"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 									>
@@ -255,10 +259,12 @@
 										/>
 									</svg>
 								{/each}
-							</div>
+							</span>
+
+							<p class="text-sm mt-3">
+								{review.comment}
+							</p>
 						</div>
-						<p>{review.createdAt}</p>
-						<p>{review.comment}</p>
 					</div>
 				{/each}
 			</div>
