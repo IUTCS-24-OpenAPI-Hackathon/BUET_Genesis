@@ -23,7 +23,7 @@ export const actions = {
             body: JSON.stringify(queryData)
         });
         const res = await ret.json()
-        // console.log(res)
+        console.log(res)
 
         return {
             success: 'done',
