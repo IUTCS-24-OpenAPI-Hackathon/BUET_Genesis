@@ -23,8 +23,9 @@ export const userTable = pgTable('user_table', {
 
 export const reviewTable = pgTable('review_table', {
 	reviewId: serial('review_id').primaryKey().notNull(),
-	reviewerId: text('reviewerId').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
+	reviewerId: text('reviewer_id').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
 	.notNull(),
+	reviewerName: text('reviewer_name').notNull(),
 	placeId: text('place_id').notNull(),
 	star: integer('star').notNull(),
 	comment: text('comment').notNull(),

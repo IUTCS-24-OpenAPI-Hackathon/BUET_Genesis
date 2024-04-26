@@ -77,6 +77,7 @@ export const actions = {
         console.log("Form ACtions Details");
         const data = await event.request.formData();
         data.append('reviewerId', userNow.userId)
+        data.append('reviewerName', userNow.userName)
         data.append('placeId', place_id)
 
         let queryData = Object.fromEntries(data.entries()) as any;
