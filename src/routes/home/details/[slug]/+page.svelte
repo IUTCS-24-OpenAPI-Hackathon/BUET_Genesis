@@ -31,7 +31,26 @@
 		}, 10000);
 	}
 
-
+	const reviews = [
+		{
+			"id":1,
+			"user":"Sakib",
+			"star":4,
+			"review":"Very Good place. I enjoy a lot"
+		},
+		{
+			"id":1,
+			"user":"Sakib",
+			"star": 5,
+			"review":"Very Good place. I enjoy a lot"
+		},
+		{
+			"id":1,
+			"user":"Sakib",
+			"star":3,
+			"review":"Very Good place. I enjoy a lot"
+		}
+	]
 
 	// 	let { session, supabase, classNow, studclass } = data;
 	// 	$: ({ session, supabase, classNow, studclass } = data);
@@ -86,15 +105,14 @@
 				</div>
 			</div>
 			<!-- Weather -->
-			<div class="mt-4">
-				<h2 class="text-lg font-medium">Weather:</h2>
+			<div class="mt-4  px-2">
 				
+				<p class="text-[22px] font-medium">Weather:</p>
 
 				<!-- Weather -->
 				<div class="mt-2">
-					<p class="text-[22px] font-medium">Weather:</p>
 					<div class="ml-2">
-			
+						
 						<div class="border-2 rounded-lg py-2">
 							<div class="flex items-center">
 								<img src={data.weatherData.current.condition.icon} alt="">
@@ -130,7 +148,7 @@
 					{:else if data.pollutionData.list[0].main.aqi == 3}
 					<span class="badge p-3 bg-orange-300">Moderate</span>
 					{:else if data.pollutionData.list[0].main.aqi == 4}
-					<span class="badge p-3 bg-red-300">Poor</span>
+					<span class="px-2 py-1 m-1 rounded-lg bg-red-300">Poor</span>
 					{:else if data.pollutionData.list[0].main.aqi == 5}
 					<span class="badge p-3 bg-red-500">Very Poor</span>
 					{/if}
@@ -138,60 +156,109 @@
 				</div>
 			</div>
 		</div>
+
+
+		
 	</div>
-	<form
-		use:enhance
-		action="?/query"
-		method="POST"
-		on:submit={() => {
-			onSubmit();
-		}}
-	>
-		<div class="max-w-lg mx-auto">
-			<h1 class="text-3xl font-bold mb-6">Leave a Review</h1>
+	
+	<div class="flex justify-center">
+		<div class="mt-[20px] w-9/10 md:w-4/5 xl:w-4/5">
+			<p class="text-[30px]">Reviews:</p>
+			<div>
+				{#each reviews as review,index}
+					<div class="border-2 shadow-sm m-2 my-3 p-4">
+						
+						<div class="flex items-center">
+							<p class="text-[28px] font-bold mr-2">{review.user}</p>
 
-			<div class="flex items-center mb-4">
-				<span class="mr-2 text-lg">Stars:</span>
-				<div class="flex">
-					{#each Array.from({ length: 5 }) as _, index}
-						<svg
-							class="star h-8 w-8 fill-current {index < stars ? 'star-filled' : ''}"
-							xmlns="http://www.w3.org/2000/svg"
-							viewBox="0 0 20 20"
-							on:click={() => handleStarHover(index + 1)}
-							on:mouseover={() => handleStarHover(index + 1)}
-							on:mouseleave={handleStarLeave}
-						>
-							<path d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z" />
-						</svg>
-					{/each}
-				</div>
-				<span class="ml-2">{stars}/5</span>
+							<div class="flex">
+								{#each Array.from({ length: review.star }) as _, index}
+									<svg
+										class="star h-5 w-5 fill-current star-filled"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										on:click={() => handleStarHover(index + 1)}
+										on:mouseover={() => handleStarHover(index + 1)}
+										on:mouseleave={handleStarLeave}
+									>
+										<path d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z" />
+									</svg>
+								{/each}
+								{#each Array.from({ length: 5-review.star }) as _, index}
+									<svg
+										class="star h-5 w-5 fill-current star_"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										on:click={() => handleStarHover(index + 1)}
+										on:mouseover={() => handleStarHover(index + 1)}
+										on:mouseleave={handleStarLeave}
+									>
+										<path d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z" />
+									</svg>
+								{/each}
+							</div>
+						</div>
+						<p>{review.review}</p>
+					</div>
+					
+				{/each}
 			</div>
-			<input hidden type="number" id="stars" name="stars" bind:value={stars} disabled={isLoading} />
 
-			<div class="mb-4">
-				<label for="comment" class="text-lg block mb-2">Comment:</label>
-				<textarea
-					id="comment"
-					name="comment"
-					bind:value={comment}
-					disabled={isLoading}
-					placeholder="What is the Radius of search (in multiple of 100m)"
-					class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-					rows="4"
-				></textarea>
-			</div>
-
-			<button
-				type="submit"
-				class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
-				on:click={handleSubmit}
+			<form
+			use:enhance
+			action="?/query"
+			method="POST"
+			on:submit={() => {
+				onSubmit();
+			}}
 			>
-				Submit
-			</button>
+				<div class="max-w-lg ">
+					<h1 class="text-3xl font-medium mb-6">Leave a Review</h1>
+	
+					<div class="flex items-center mb-4">
+						<span class="mr-2 text-lg">Stars:</span>
+						<div class="flex">
+							{#each Array.from({ length: 5 }) as _, index}
+								<svg
+									class="star h-8 w-8 fill-current {index < stars ? 'star-filled' : ''}"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 20 20"
+									on:click={() => handleStarHover(index + 1)}
+									on:mouseover={() => handleStarHover(index + 1)}
+									on:mouseleave={handleStarLeave}
+								>
+									<path d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z" />
+								</svg>
+							{/each}
+						</div>
+						<span class="ml-2">{stars}/5</span>
+					</div>
+					<input hidden type="number" id="stars" name="stars" bind:value={stars} disabled={isLoading} />
+	
+					<div class="mb-4">
+						<label for="comment" class="text-lg block mb-2">Comment:</label>
+						<textarea
+							id="comment"
+							name="comment"
+							bind:value={comment}
+							disabled={isLoading}
+							placeholder="Leave a comment"
+							class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+							rows="4"
+						></textarea>
+					</div>
+	
+					<button
+						type="submit"
+						class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
+						on:click={handleSubmit}
+					>
+						Submit
+					</button>
+				</div>
+			</form>
 		</div>
-	</form>
+	</div>
 	
 
 </div>
@@ -215,12 +282,15 @@
 		cursor: pointer;
 		transition: color 0.2s;
 	}
+	.star_{
+		color: #d8ce94
+	}
 
 	.star:hover {
-		color: #f7d000;
+		color: #f7b900;
 	}
 
 	.star-filled {
-		color: #f7d000;
+		color: #f7b900;
 	}
 </style>

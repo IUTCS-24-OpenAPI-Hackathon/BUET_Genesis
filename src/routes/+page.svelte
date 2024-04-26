@@ -132,7 +132,7 @@
 			<div class="m-4 p-3 flex items-center justify-center">
 				<div class="save">
 					<p class="md:text-[80px] text-[60px] font-bold leading-tight">
-						Redefine your knowledge about your city.
+						Know your knowledge about your city.
 					</p>
 					<p class="text-[24px] md:w-3/4">Lorem Ipsum :</p>
 				</div>
@@ -156,7 +156,7 @@
 		</div>
 	</div>
 
-	
+
 
 	<Footer />
 	<ShortFooter />

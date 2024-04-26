@@ -7,11 +7,11 @@
 
 <body class="inset-0 flex min-h-screen w-full flex-col bg-white">
 	<nav class="flex w-full flex-wrap items-center justify-between bg-gray-800 p-6">
-		<div class="mr-6 flex flex-shrink-0 items-center text-white">
+		<div class="mr-6 flex flex-shrink-0  items-center text-white">
 			<img src={logo} width="50px" class="mb-1" alt="logo"/>
-			<span class="text-3xl font-medium tracking-tight ml-5 mr-10">Voyager</span>
+			<!-- <span class="text-3xl font-medium tracking-tight ml-5 mr-10"></span> -->
 		</div>
-		<div class="flex w-auto flex-grow items-center">
+		<div class="flex items-center">
 			<div class="flex-grow text-sm">
 				{#if pathName.includes('search')}
 					<a
