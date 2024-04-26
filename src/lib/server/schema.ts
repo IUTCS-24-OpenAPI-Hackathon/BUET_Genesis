@@ -12,6 +12,7 @@ import { relations } from 'drizzle-orm';
 
 export type user = typeof userTable.$inferInsert;
 export type review = typeof reviewTable.$inferInsert;
+export type blog = typeof blogTable.$inferInsert;
 
 export const userTable = pgTable('user_table', {
 	userId: text('user_id').primaryKey().notNull(),
@@ -26,6 +27,18 @@ export const reviewTable = pgTable('review_table', {
 	.notNull(),
 	placeId: text('place_id').notNull(),
 	star: integer('star').notNull(),
-	comment: text('comment').notNull()
+	comment: text('comment').notNull(),
+	createdAt: timestamp('created_at').defaultNow()
+})
+
+export const blogTable = pgTable('blog_table', {
+	blogId: serial("blog_id").primaryKey().notNull(),
+	writerId: text('writer_id').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
+	.notNull(),
+	placeId: text('place_id').notNull(),
+	blogTitle: text('blog_title').notNull(),
+	blogContent: text('blog_content').notNull(),
+	createdAt: timestamp('created_at').defaultNow(),
+	tags: text('tags')
 })
 
