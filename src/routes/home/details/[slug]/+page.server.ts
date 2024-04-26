@@ -95,7 +95,7 @@ export const actions = {
         };
 
 
-        // // throw redirect(303, '/auth/search');
+        throw redirect(303, `/home/details/${place_id}`);
 
     },
 } satisfies Actions
