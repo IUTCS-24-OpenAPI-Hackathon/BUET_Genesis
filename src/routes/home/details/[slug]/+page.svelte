@@ -37,19 +37,19 @@
 			id: 1,
 			user: 'Sakib',
 			star: 4,
-			review: 'Very Good place. I enjoy a lot'
+			comment: 'Very Good place. I enjoy a lot'
 		},
 		{
 			id: 1,
 			user: 'Sakib',
 			star: 5,
-			review: 'Very Good place. I enjoy a lot'
+			comment: 'Very Good place. I enjoy a lot'
 		},
 		{
 			id: 1,
 			user: 'Sakib',
 			star: 3,
-			review: 'Very Good place. I enjoy a lot'
+			comment: 'Very Good place. I enjoy a lot'
 		}
 	];
 
@@ -171,7 +171,7 @@
 									<img src={wind} alt="" class="w-5" />
 
 									<p>
-										<span>NO DATA FOUND :(</span>
+										<span>NO DATA FOUND :</span>
 									</p>
 								</div>
 							</div>
@@ -225,9 +225,7 @@
 										class="star h-5 w-5 fill-current star-filled"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
-										on:click={() => handleStarHover(index + 1)}
-										on:mouseover={() => handleStarHover(index + 1)}
-										on:mouseleave={handleStarLeave}
+										
 									>
 										<path
 											d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
@@ -239,9 +237,6 @@
 										class="star h-5 w-5 fill-current star_"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
-										on:click={() => handleStarHover(index + 1)}
-										on:mouseover={() => handleStarHover(index + 1)}
-										on:mouseleave={handleStarLeave}
 									>
 										<path
 											d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
@@ -250,7 +245,7 @@
 								{/each}
 							</div>
 						</div>
-						<p>{review.review}</p>
+						<p>{review.comment}</p>
 					</div>
 				{/each}
 			</div>
