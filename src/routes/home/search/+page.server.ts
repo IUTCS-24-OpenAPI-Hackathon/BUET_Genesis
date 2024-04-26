@@ -8,13 +8,6 @@ export const actions = {
         const data = await event.request.formData();
         // data.append('categories', 'education, commercial');
         console.log(data.get("categories"))
-        
-        if(data.get("categories")==""){
-            return {
-                success: 'nope',
-                returned: []
-            };
-        }
 
         const searchType = data.get("searchType")
 
