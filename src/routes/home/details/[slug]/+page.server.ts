@@ -8,11 +8,12 @@ let place_id;
 export const load = async ({ locals: { supabase }, params, fetch }) => {
 
     place_id = params.slug;
-    console.log("Place Id: ", place_id);
+    // console.log("Place Id: ", place_id);
     let email = (await supabase.auth.getUser()).data.user?.email;
 
-    console.log("Amar email hoilo")
-    console.log(email)
+    // console.log("Amar email hoilo")
+    // console.log(email)
+
 
 
     const ret0 = await fetch('/api/user/get', {
@@ -23,7 +24,7 @@ export const load = async ({ locals: { supabase }, params, fetch }) => {
     userNow = res0[0];
 
     // console.log("Ami holam");
-    console.log(userNow)
+    console.log("Loading: ", userNow)
 
 
 
@@ -73,40 +74,23 @@ export const load = async ({ locals: { supabase }, params, fetch }) => {
 }
 export const actions = {
     query: async (event) => {
-        console.log("backend");
+        console.log("Form ACtions Details");
         const data = await event.request.formData();
-
-        // data.append('categories', 'education, commercial');
-        console.log(data.get("categories"))
-
+        data.append('reviewerId', userNow.userId)
+        data.append('placeId', place_id)
 
         let queryData = Object.fromEntries(data.entries()) as any;
-        queryData.append('reviewerId', userNow.userId)
-        queryData.append('placeId', place_id)
 
-        console.log(queryData)
+
+        console.log("QueryData: ", queryData)
 
         await event.fetch('/api/review/add', {
             method: 'POST',
-            body: queryData
+            body: JSON.stringify(queryData)
         })
-
-
-
-        // let lat = queryData.lat;
-        // let lon = queryData.lon;
-        // let rng = queryData.rng;
-
-        // const ret = await event.fetch('/api/geoapify/radius-search', {
-        //     method: 'POST',
-        //     body: JSON.stringify(queryData)
-        // });
-        // const res = await ret.json()
-        // // console.log(res)
 
         return {
             success: 'done',
-
         };
 
 

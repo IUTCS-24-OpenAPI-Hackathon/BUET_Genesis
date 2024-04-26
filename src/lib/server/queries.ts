@@ -1,7 +1,7 @@
 import db from './db';
-import { userTable, reviewTable } from './schema';
+import { userTable, reviewTable,blogTable } from './schema';
 
-import type { user, review } from './schema';
+import type { user, review, blog } from './schema';
 import { eq, lt, gte, ne, inArray, and, or, sql } from 'drizzle-orm';
 
 export async function insertUser(newUser: user) {
@@ -17,4 +17,12 @@ export async function getPlaceReview(placeId: string) {
 }
 export async function getUser(email: string) {
 	return await db.select().from(userTable).where(eq(userTable.email, email))
+}
+
+export async function insertBlog(newBlog: blog){
+	await db.insert(blogTable).values(newBlog)
+}
+
+export async function getPlaceBlog(placeId: string){
+	return await db.select().from(blogTable).where(eq(blogTable.placeId, placeId))
 }
