@@ -4,7 +4,7 @@ import type { Actions } from './$types';
 
 export const actions = {
     query: async (event) => {
-        console.log("banckend");
+        console.log("backend");
         const data = await event.request.formData();
         data.append('categories', 'education, commercial');
         // console.log(data)
@@ -22,11 +22,12 @@ export const actions = {
             method: 'POST',
             body: JSON.stringify(queryData)
         });
+        const res = await ret.json()
+        console.log(res)
 
-        console.log(ret["features"])
         return {
-            // success: 'done',
-            // returned: res
+            success: 'done',
+            returned: res
         };
 
 
