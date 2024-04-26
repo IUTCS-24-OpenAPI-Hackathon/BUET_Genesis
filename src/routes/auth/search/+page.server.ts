@@ -3,10 +3,10 @@ import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions = {
-    query: async ({ event }) => {
+    query: async (event) => {
         console.log("banckend");
         const data = await event.request.formData();
-        data.append('categories', 'Education, Commercial');
+        data.append('categories', 'education, commercial');
         // console.log(data)
 
 
@@ -23,11 +23,14 @@ export const actions = {
             body: JSON.stringify(queryData)
         });
 
+        console.log(ret["features"])
+        return {
+            // success: 'done',
+            // returned: res
+        };
 
-        console.log(ret)
 
-
-        throw redirect(303, '/auth/search');
+        // throw redirect(303, '/auth/search');
 
     },
 } satisfies Actions

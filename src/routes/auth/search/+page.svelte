@@ -1,12 +1,35 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
+	import type { ActionData, PageData } from './$types';
+
+	// import { enhance } from '$app/forms';
+	// import { goto } from '$app/navigation';
+	// import { onMount } from 'svelte';
+
+	export let data: PageData;
+
+	export let form: ActionData;
 
 	let lat = 'Fetching...';
 	let lon = 'Fetching...';
 	let rng;
 	let education;
 	let commercial;
+
+	// $: allproducts = data.allproducts;
+	// $: allproducts = [...allproducts, ...newProducts];
+	let locations;
+
+	$: {
+		// console.log(form?.success);
+		locations = [];
+		if (form?.success == 'done') {
+			console.log(form.returned);
+			form.success = '';
+		}
+		// console.log(newProducts);
+	}
 	// let categories = {
 	// 	Fruits: ['Apple', 'Banana', 'Orange'],
 	// 	Vegetables: ['Carrot', 'Tomato', 'Cucumber']
@@ -79,7 +102,7 @@
 		<button
 			type="submit"
 			class="btn btn-success rounded-lg text-xl font-semibold mt-2"
-			disabled={isLoading && !isChecked}
+			disabled={isLoading}
 		>
 			{#if isLoading}
 				<span class="loading loading-spinner loading-xs"></span>

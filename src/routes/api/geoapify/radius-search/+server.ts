@@ -13,10 +13,9 @@ export const POST: RequestHandler = async (event) => {
 
     const url = `https://api.geoapify.com/v2/places?categories=${categories}&filter=circle:${long},${lat},${radius}&bias=proximity:${long},${lat}&limit=20&apiKey=${apiKey}`
     const ret = await fetch(url)
-
-    console.log(url)
+    const res = await ret.json()
 
     return new Response(
-        JSON.stringify(ret)
+        res
     )
 }
