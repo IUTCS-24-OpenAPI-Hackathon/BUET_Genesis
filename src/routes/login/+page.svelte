@@ -38,10 +38,12 @@
 </script>
 
 <section class="h-screen ml-10 mr-10">
-	<div class="h-full">
+	<div class="h-full border-2 ">
 		<!-- Left column container with background-->
-		<div class="flex h-full flex-wrap items-center justify-center lg:justify-between">
-			<div
+		<div class="flex h-full flex-wrap items-center  w-full justify-center ">
+			
+			<div class="flex xl:w-3/4 w-11/12 md:4/5">
+				<div
 				class="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12"
 			>
 				<img
@@ -49,7 +51,7 @@
 					class="w-full"
 					alt="Sample image"
 				/>
-			</div>
+				</div>
 
 			<!-- Right column container -->
 			<div class="mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12">
@@ -156,6 +158,8 @@
 						</button>
 					</div>
 				</form>
+			</div>
+
 			</div>
 		</div>
 	</div>
