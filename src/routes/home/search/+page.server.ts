@@ -6,8 +6,8 @@ export const actions = {
     query: async (event) => {
         console.log("backend");
         const data = await event.request.formData();
-        data.append('categories', 'education, commercial');
-        // console.log(data)
+        // data.append('categories', 'education, commercial');
+        console.log(data.get("categories"))
 
 
         let queryData = Object.fromEntries(data.entries()) as any;
@@ -23,7 +23,7 @@ export const actions = {
             body: JSON.stringify(queryData)
         });
         const res = await ret.json()
-        console.log(res)
+        // console.log(res)
 
         return {
             success: 'done',
