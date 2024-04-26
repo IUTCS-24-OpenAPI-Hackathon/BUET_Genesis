@@ -18,27 +18,56 @@
 	</div> -->
 	<div>
 		<div class="m-2">
-			<button on:click={history.back}>
+			<button on:click={()=>window.history.back()}>
 				Go Back 
 			</button>
 		</div>
 		<div class="flex justify-center ">
 			<div class="w-9/10 md:w-4/5 xl:w-4/5">
-				<p class="text-[45px] font-bold">{data.res.features[0].properties.name}</p>
+				<p ><span class="text-[45px] font-bold">{data.res.features[0].properties.name}</span><span> GMT{data.res.features[0].properties.timezone.offset_STD} </span></p>
 				<p>{data.res.features[0].properties.address_line2}</p>
 				<div class="flex space-x-2 mt-2">
 					<p class="py-1 px-2 bg-gray-400 text-white ">{data.res.features[0].properties.categories[0]}</p>
 					<p class="py-1 px-2 bg-gray-400 text-white">{data.res.features[0].properties.datasource.raw.amenity}</p>
 				</div>
 
+				<!-- Address -->
 				<div class="mt-2">
-					<p class="text-[22px]">Address:</p>
+					<p class="text-[22px] font-medium">Address:</p>
 					<div class="ml-3">
 						<p>Street : {data.res.features[0].properties.street}</p>
 						<p>City : {data.res.features[0].properties.city}</p>
 						<p>State : {data.res.features[0].properties.state}</p>
 						<p>Country : {data.res.features[0].properties.country}</p>
 						<p>Street : {data.res.features[0].properties.street}</p>
+					</div>
+				</div>
+
+				<!-- Weather -->
+				<div class="mt-2">
+					<p class="text-[22px] font-medium">Weather:</p>
+					<div class="ml-2">
+						<p>
+							Temp : {data.weatherData.current.temp_c} <span>feels like {data.weatherData.current.feelslike_c}</span>
+						</p>
+						<p> 
+							Sky Condition : {data.weatherData.current.condition.text}
+						</p>
+						<p>
+							Wind velocity : {data.weatherData.current.wind_mph} mile/h
+						</p>
+						<p>
+							Wind Direction : {data.weatherData.current.wind_degree} {data.weatherData.current.wind_dir}
+						</p>
+					</div>
+
+				</div>
+
+				<!-- Air pollution -->
+				<div >
+					<p class="text-[22px] font-medium">Air Quality:</p>
+					<div class="ml-2">
+						<p>Air Quality Index:{data.pollutionData.list[0].main.aqi}</p>
 					</div>
 				</div>
 			</div>
@@ -48,9 +77,9 @@
 
 </div>
 
-<pre>{JSON.stringify(data.res, null, 2)}</pre>
+<!-- <pre>{JSON.stringify(data.res, null, 2)}</pre>
 <pre>{JSON.stringify(data.weatherData, null, 2)}</pre>
-<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre>
+<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre> -->
 
 <style>
 	.chipi {
