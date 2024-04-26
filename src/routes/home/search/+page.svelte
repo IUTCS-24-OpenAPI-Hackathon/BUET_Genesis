@@ -102,21 +102,21 @@
 
 			const customIcon_airport = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/airport.svg',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/airport.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
 			});
 			const customIcon_entertainment = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/entertainment-svgrepo-com.svg',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/entertainment.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
 			});
 			const customIcon_educational = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/educational.png',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/education.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
@@ -130,21 +130,49 @@
 			});
 			const customIcon_sports = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/sports.png',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/sport.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
 			});
 			const customIcon_commercial = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/transportation-commercial-svgrepo-com.svg',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/commercial.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
 			});
 			const customIcon_hoppital = leaflet.icon({
 				iconUrl:
-					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/hospital.png',
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/healthcare.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_natural = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/natural.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_catering = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/catering.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_activity = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/activity.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_accomodation = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/accomodation.png',
 				iconSize: [40, 40],
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40]
@@ -152,7 +180,7 @@
 
 			locations.forEach((location) => {
 				console.log(location.properties.name, location.properties.lat);
-
+				let myurl = `./details/${location.properties.place_id}`;
 				if (location.properties.categories[0] == 'education') {
 					leaflet
 						.marker([location.properties.lat, location.properties.lon], {
@@ -160,7 +188,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -171,7 +199,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -182,7 +210,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -193,7 +221,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -204,7 +232,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -215,7 +243,7 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -226,7 +254,51 @@
 						})
 						.addTo(myMap)
 						.bindPopup(
-							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'accomodation') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_accomodation
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'natural') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_natural
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'catering') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_catering
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'activity') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_activity
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<a href=${myurl}>Go >></a><b>${location.properties.categories[0]}</b><br><b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
 						)
 						.openPopup();
 				}
@@ -478,12 +550,12 @@
 		console.log(isNoneSelected);
 	}
 
-	let isMap = false
+	let isMap = false;
 
-	const mapfunc = ()=>{
+	const mapfunc = () => {
 		func();
 		isMap = !isMap;
-	}
+	};
 </script>
 
 <div class="flex flex-col items-center justify-center mt-10">
@@ -668,35 +740,30 @@
 
 {#if locations}
 	{#if locations.length > 0}
-			<div class="flex items-center mt-10 ml-10">
-				<!-- map toggle -->
-				<div>
-					<label for="toggleC" class="flex items-center cursor-pointer">
-						<!-- toggle -->
-						<div class="relative">
-							<!-- input -->
-							<input
-								type="checkbox"
-								id="toggleC"
-								class="sr-only"
-								on:click={() => mapfunc()}
-							/>
-							<!-- line -->
-							<div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
-							<!-- dot -->
-							<div
-								class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"
-							></div>
-						</div>
-						<!-- label -->
-						<div class="ml-3 text-gray-700 font-medium">
-							{isMap ? 'List View' : 'Map View'}
-						</div>
-					</label>
-				</div>
+		<div class="flex items-center mt-10 ml-10">
+			<!-- map toggle -->
+			<div>
+				<label for="toggleC" class="flex items-center cursor-pointer">
+					<!-- toggle -->
+					<div class="relative">
+						<!-- input -->
+						<input type="checkbox" id="toggleC" class="sr-only" on:click={() => mapfunc()} />
+						<!-- line -->
+						<div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+						<!-- dot -->
+						<div
+							class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"
+						></div>
+					</div>
+					<!-- label -->
+					<div class="ml-3 text-gray-700 font-medium">
+						{isMap ? 'List View' : 'Map View'}
+					</div>
+				</label>
 			</div>
+		</div>
 
-			{#if !isMap}
+		{#if !isMap}
 			<div class="grid grid-cols-3 gap-4 my-5">
 				{#each locations as location}
 					{#if location.properties.name}
@@ -734,11 +801,11 @@
 					{/if}
 				{/each}
 			</div>
-			{:else}
+		{:else}
 			<div id="mapElement" style="height: 500px;" class="rounded-lg shadow-md ml-10 mr-10 mt-6" />
 			<!-- <div id="hospital-map" style="height: 500px;" class="rounded-lg shadow-md" /> -->
 			<!-- <div bind:this={mapElement}>My Map</div> -->
-			{/if}
+		{/if}
 	{:else if showMessage}
 		<div class="flex flex-col justify-center items-center">
 			<div class="text-xl mt-20 text-red-500 bg-red-200 rounded-xl p-3">
