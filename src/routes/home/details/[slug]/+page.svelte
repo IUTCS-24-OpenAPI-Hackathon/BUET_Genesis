@@ -1,7 +1,7 @@
 <script lang="ts">
 	// import Message from './Message.svelte';
 	export let data;
-	let features = data.features;
+	let features = data.res.features;
 
 	// 	let { session, supabase, classNow, studclass } = data;
 	// 	$: ({ session, supabase, classNow, studclass } = data);
@@ -49,14 +49,17 @@
 </div>
 
 <pre>{JSON.stringify(data.res, null, 2)}</pre>
-<style>
-.chipi {
-    background-color: #c1d4e3;
+<pre>{JSON.stringify(data.weatherData, null, 2)}</pre>
+<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre>
 
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-}
+<style>
+	.chipi {
+		background-color: #c1d4e3;
+
+		padding: 0.5rem;
+		margin-right: 0.5rem;
+		border-radius: 0.25rem;
+		display: flex;
+		align-items: center;
+	}
 </style>
