@@ -8,7 +8,7 @@
 </script>
 
 <div class="mt-6 ml-6">
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
 	<div class="flex flex-row space-x-3">
 		{#each data.res.features[0].properties.categories as category}
 			<small class="chipi">
@@ -17,13 +17,13 @@
 		{/each}
 	</div>
 
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
-	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name_international.en}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
+	<h1 class="font-extrabold text-xl">{data.res.features[0].properties.name}</h1>
 </div>
 
 <pre>{JSON.stringify(data.res, null, 2)}</pre>

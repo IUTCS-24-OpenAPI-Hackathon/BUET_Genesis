@@ -121,6 +121,8 @@
 	{/each}
 {/if}
 
+<pre>{JSON.stringify(locations, null, 2)}</pre>
+
 <h1>Your Current Location</h1>
 <p>Latitude: {lat}</p>
 <p>Longitude: {lon}</p>
