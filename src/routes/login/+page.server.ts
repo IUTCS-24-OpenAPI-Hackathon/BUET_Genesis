@@ -80,7 +80,7 @@ export const actions = {
             const { data, error: err } = await supabase.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: 'http://localhost:5173/auth/home'
+                    redirectTo: 'http://localhost:5173/auth/search'
                 },
             })
 
