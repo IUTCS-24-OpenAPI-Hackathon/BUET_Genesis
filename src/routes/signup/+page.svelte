@@ -100,6 +100,7 @@
 								/></svg
 							>
 							<input
+								class="flex-grow"
 								required
 								type="email"
 								placeholder="name@domain.com"
@@ -129,6 +130,7 @@
 								/></svg
 							>
 							<input
+								class="flex-grow"
 								required
 								type="password"
 								name="password"
@@ -144,7 +146,7 @@
 
 					<div class="mb-6 flex items-center justify-between">
 						<!-- Remember me checkbox -->
-						<div class="flex items-center justify-between">
+						<!-- <div class="flex items-center justify-between">
 							<div class="flex items-center">
 								<input
 									id="remember_me"
@@ -156,12 +158,12 @@
 									Remember me
 								</label>
 							</div>
-						</div>
+						</div> -->
 
 						<!--Forgot password link-->
-						<a href="/signup" class="font-medium text-indigo-600 hover:text-indigo-500">
-							Don't Have an Account? Sign Up Here
-						</a>
+						<div class="font-medium text-black">
+							Alread have an account? <a href="/login" class="text-sky-600 hover:underline">Log In</a>
+						</div>
 					</div>
 
 					<!-- Login button -->
@@ -171,7 +173,7 @@
 							class="group w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
 						>
 							{#if isLoading}
-								<span class="loading loading-spinner loading-xs"></span>
+							<span class="loading loading-spinner loading-xs"></span>
 							{/if}
 							Register
 						</button>
