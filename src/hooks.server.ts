@@ -32,7 +32,7 @@ async function supabase({ event, resolve }) {
 
 async function authorization({ event, resolve }) {
     // protect requests to all routes that start with /protected-routes
-    if (event.url.pathname.startsWith('/auth') && event.request.method === 'GET') {
+    if (event.url.pathname.startsWith('/home') && event.request.method === 'GET') {
         const session = await event.locals.getSession()
         if (!session) {
             // the user is not signed in
@@ -41,7 +41,7 @@ async function authorization({ event, resolve }) {
     }
 
     // protect POST requests to all routes that start with /protected-posts
-    if (event.url.pathname.startsWith('/auth') && event.request.method === 'POST') {
+    if (event.url.pathname.startsWith('/home') && event.request.method === 'POST') {
         const session = await event.locals.getSession()
         if (!session) {
             // the user is not signed in
