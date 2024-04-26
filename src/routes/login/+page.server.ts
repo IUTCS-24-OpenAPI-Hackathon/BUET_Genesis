@@ -65,7 +65,7 @@ export const actions = {
         //Add user if not already added 
 
 
-        throw redirect(303, '/auth/home');
+        throw redirect(303, '/home/search');
     },
     social: async ({ url, request, locals: { supabase, getSession } }) => {
         console.log("ok in server")
@@ -80,7 +80,7 @@ export const actions = {
             const { data, error: err } = await supabase.auth.signInWithOAuth({
                 provider: provider,
                 options: {
-                    redirectTo: 'http://localhost:5173/auth/search'
+                    redirectTo: 'http://localhost:5173/home/search'
                 },
             })
 

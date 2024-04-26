@@ -19,14 +19,13 @@
 
 	// $: allproducts = data.allproducts;
 	// $: allproducts = [...allproducts, ...newProducts];
-	let locations;
+	let locations: any = [];
 
 	$: {
 		// console.log(form?.success);
 		locations = [];
 		if (form?.success == 'done') {
-			console.log(form.returned);
-			form.success = '';
+			locations = form?.returned.features;
 		}
 		// console.log(newProducts);
 	}
@@ -111,6 +110,16 @@
 		</button>
 	</form>
 </div>
+
+{#if locations.length > 0}
+	{#each locations as location}
+		<diV class="border border-black m-5">
+			<a href="./details/{location.properties.place_id}">
+				{location.properties.city}
+			</a>
+		</diV>
+	{/each}
+{/if}
 
 <h1>Your Current Location</h1>
 <p>Latitude: {lat}</p>
