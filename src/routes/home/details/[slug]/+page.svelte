@@ -287,8 +287,8 @@
 					<input
 						hidden
 						type="number"
-						id="stars"
-						name="stars"
+						id="star"
+						name="star"
 						bind:value={stars}
 						disabled={isLoading}
 					/>
