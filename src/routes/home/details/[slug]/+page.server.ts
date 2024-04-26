@@ -19,9 +19,27 @@ export const load = async (event) => {
     const res = await ret.json()
     console.log(res)
 
+    const lat = res.features[0].properties.lat
+    const lon = res.features[0].properties.lon
+    console.log(lat, lon)
+
+    const ret2 = await event.fetch('/api/weather', {
+        method: 'POST',
+        body: JSON.stringify({ lat: lat, lon: lon })
+    });
+    let weatherData = await ret2.json()
+    console.log(weatherData)
+
+
+    const ret3 = await event.fetch('/api/pollution', {
+        method: 'POST',
+        body: JSON.stringify({ lat: lat, lon: lon })
+    });
+    let pollutionData = await ret3.json()
+    console.log(pollutionData)
 
 
 
 
-    return { res };
+    return { res, weatherData, pollutionData };
 }
