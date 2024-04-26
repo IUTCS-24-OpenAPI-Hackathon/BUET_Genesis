@@ -2,6 +2,7 @@
 	// import Message from './Message.svelte';
 	import wind from '$lib/images/wind.png';
 	import { enhance } from '$app/forms';
+	import missing from '$lib/images/missing-svgrepo-com.svg';
 
 	export let data;
 	let features = data.res.features;

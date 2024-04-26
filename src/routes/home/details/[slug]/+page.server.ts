@@ -4,25 +4,22 @@ import type { Actions } from './$types';
 
 let userNow;
 let place_id;
-export const load = async (event) => {
+export const load = async ({ locals:{supabase}, params, fetch }) => {
 
-    place_id = event.params.slug;
-    console.log("param holo ", place_id);
-
-    const {
-        data: { user }
-    } = await event.locals.supabase.auth.getUser();
-    console.log(user);
+    place_id = params.slug;
+    console.log("Place Id: ", place_id);
+    let email = (await supabase.auth.getUser()).data.user?.email;
 
 
-    // const ret0 = await event.fetch('/api/user/get', {
-    //     method: 'POST',
-    //     body: JSON.stringify({ email: user11.email })
-    // });
-    // const res0 = await ret0.json()
-    // userNow = res0[0];
+    const ret0 = await fetch('/api/user/get', {
+        method: 'POST',
+        body: JSON.stringify({ email: email })
+    });
+    const res0 = await ret0.json()
+    userNow = res0[0];
+
     // console.log("Ami holam");
-    // console.log(userNow)
+    console.log(userNow)
 
 
 
@@ -33,7 +30,7 @@ export const load = async (event) => {
 
     // console.log(JSON.stringify(formData))
 
-    const ret = await event.fetch('/api/geoapify/details', {
+    const ret = await fetch('/api/geoapify/details', {
         method: 'POST',
         body: JSON.stringify({ place_id: place_id })
     });
@@ -44,7 +41,7 @@ export const load = async (event) => {
     const lon = res.features[0].properties.lon
     console.log(lat, lon)
 
-    const ret2 = await event.fetch('/api/weather', {
+    const ret2 = await fetch('/api/weather', {
         method: 'POST',
         body: JSON.stringify({ lat: lat, lon: lon })
     });
@@ -52,14 +49,14 @@ export const load = async (event) => {
     console.log(weatherData)
 
 
-    const ret3 = await event.fetch('/api/pollution', {
+    const ret3 = await fetch('/api/pollution', {
         method: 'POST',
         body: JSON.stringify({ lat: lat, lon: lon })
     });
     let pollutionData = await ret3.json()
     console.log(pollutionData)
 
-    const ret4 = await event.fetch('/api/review/get-place-review', {
+    const ret4 = await fetch('/api/review/get-place-review', {
         method: 'POST',
         body: JSON.stringify({ placeId: place_id })
     });

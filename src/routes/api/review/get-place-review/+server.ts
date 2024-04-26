@@ -3,8 +3,8 @@ import { getPlaceReview } from "$lib/server/queries"
 
 export const POST: RequestHandler = async (event) => {
     const data = await event.request.json()
-    console.log("Ami time paile");
-    console.log(data.placeId)
+    // console.log("Ami time paile");
+    // console.log(data.placeId)
     const res = await getPlaceReview(data.placeId)
 
     // console.log(res);
