@@ -1,4 +1,6 @@
 <script lang="ts">
+	import _ from 'lodash'; // Import lodash library using default export
+	const debounce = _.debounce; // Extract debounce function from lodash
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
@@ -13,6 +15,10 @@
 
 	let lat = 'Fetching...';
 	let lon = 'Fetching...';
+	let myLat = 'Fetching...';
+	let myLon = 'Fetching...';
+	let otherLat = 'Fetching...';
+	let otherLon = 'Fetching...';
 	let rng: any;
 	let education;
 	let commercial;
@@ -34,13 +40,13 @@
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
-					lat = position.coords.latitude;
-					lon = position.coords.longitude;
+					myLat = position.coords.latitude;
+					myLon = position.coords.longitude;
 				},
 				(error) => {
 					console.error(error);
-					lat = 'Unable to fetch';
-					lon = 'Unable to fetch';
+					myLat = 'Unable to fetch';
+					myLon = 'Unable to fetch';
 				}
 			);
 		} else {
@@ -164,6 +170,49 @@
 		isSportChecked = !isSportChecked;
 		buildCategories();
 	}
+
+	let address = '';
+	let suggestions: any = [];
+	let showSuggestions = false;
+
+	const debouncedFetchSuggestions = debounce(fetchSuggestions, 500);
+
+	async function fetchSuggestions() {
+		const ret = await fetch(`/api/geoapify/autocomplete`, {
+			method: 'POST',
+			body: JSON.stringify({ address: address })
+		});
+		const res = await ret.json();
+		suggestions = res.results;
+		showSuggestions = true;
+
+		console.log(suggestions);
+	}
+
+	function handleInput(event) {
+		address = event.target.value;
+		debouncedFetchSuggestions();
+	}
+
+	function selectSuggestion(suggestion: any) {
+		address = suggestion.address_line1;
+		otherLat = suggestion.lat;
+		otherLon = suggestion.lon;
+		showSuggestions = false;
+	}
+
+	let isAutoLocation = false;
+	let isSearchInALocation = false;
+
+	$: {
+		if (isAutoLocation) {
+			lat = myLat;
+			lon = myLon;
+		} else {
+			lat = otherLat;
+			lon = otherLon;
+		}
+	}
 </script>
 
 <div class="flex flex-col items-center justify-center mt-10">
@@ -179,19 +228,99 @@
 			onSubmit();
 		}}
 	>
+		<div class="dropdown flex flex-col">
+			<input
+				required
+				class="input input-bordered input-primary w-full mb-5"
+				name="address"
+				bind:value={address}
+				on:input={handleInput}
+				autocomplete="off"
+				disabled={isLoading || isAutoLocation}
+				placeholder="Current Address"
+			/>
+			{#if showSuggestions && suggestions.length > 0}
+				<ul>
+					{#each suggestions as suggestion}
+						<li on:click={() => selectSuggestion(suggestion)}>{suggestion.address_line1}</li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
+
 		<input
 			required
-			class="input input-bordered input-primary w-full max-w-xs"
-			type="number"
+			class="input input-bordered input-primary w-full"
+			type="text"
+			inputmode="numeric"
 			id="rng"
 			name="rng"
 			bind:value={rng}
-			disabled={isLoading}
-			placeholder="What is the Radius of search (in multiple of 100m)"
+			disabled={isLoading || isSearchInALocation}
+			placeholder="Radius of search (in multiple of 100m)"
 		/>
+
 		<input hidden type="text" id="lat" name="lat" bind:value={lat} disabled={isLoading} />
 		<input hidden type="text" id="lon" name="lon" bind:value={lon} disabled={isLoading} />
 		<input hidden type="text" id="categories" name="categories" bind:value={categories} />
+
+		<div class="flex felx-row justify-around">
+			<div class="flex items-center mt-10">
+				<!-- First toggle -->
+				<div>
+					<label for="toggleA" class="flex items-center cursor-pointer">
+						<!-- toggle -->
+						<div class="relative">
+							<!-- input -->
+							<input
+								type="checkbox"
+								id="toggleA"
+								class="sr-only"
+								on:click={() => (isAutoLocation = !isAutoLocation)}
+							/>
+							<!-- line -->
+							<div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+							<!-- dot -->
+							<div
+								class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"
+							></div>
+						</div>
+						<!-- label -->
+						<div class="ml-3 text-gray-700 font-medium">
+							{isAutoLocation ? 'Using current location' : 'Enter address'}
+						</div>
+					</label>
+				</div>
+			</div>
+
+			<div class="flex items-center mt-10">
+				<!-- Second toggle -->
+				<div>
+					<label for="toggleB" class="flex items-center cursor-pointer">
+						<!-- toggle -->
+						<div class="relative">
+							<!-- input -->
+							<input
+								type="checkbox"
+								id="toggleB"
+								class="sr-only"
+								on:click={() => (isSearchInALocation = !isSearchInALocation)}
+							/>
+							<!-- line -->
+							<div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+							<!-- dot -->
+							<div
+								class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"
+							></div>
+						</div>
+						<!-- label -->
+						<div class="ml-3 text-gray-700 font-medium">
+							{isSearchInALocation ? 'Search in a radius' : 'Search in a location'}
+						</div>
+					</label>
+				</div>
+			</div>
+		</div>
 
 		<div class="grid grid-cols-3 gap-4 mt-5">
 			<label>
@@ -256,7 +385,7 @@
 </div>
 
 {#if locations.length > 0}
-	<div class="grid grid-cols-3 gap-4 mt-5">
+	<div class="grid grid-cols-3 gap-4 my-5">
 		{#each locations as location}
 			{#if location.properties.name}
 				<!-- <div class="border border-black m-5">
@@ -310,12 +439,68 @@ name, street, suburb, city, postcode, categories(its an array)
 -->
 
 <style>
-	.dropdown-enter-active,
-	.dropdown-leave-active {
-		transition: height 0.5s ease;
+	.toggle {
+		position: relative;
+		width: 60px;
+		height: 30px;
+		border-radius: 15px;
+		background-color: #ccc;
+		cursor: pointer;
 	}
-	.dropdown-enter, .dropdown-leave-to /* <- This is the starting point of the animation */ {
-		height: 0;
-		overflow: hidden;
+
+	.handle {
+		position: absolute;
+		top: 2px;
+		left: 2px;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background-color: #fff;
+		transition: transform 0.3s;
+	}
+
+	.toggle.on .handle {
+		transform: translateX(30px);
+	}
+	.dropdown {
+		position: relative;
+	}
+
+	.dropdown ul {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		z-index: 1000;
+		display: none;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		background-color: #fff;
+		border: 1px solid #ccc;
+		border-top: none;
+		border-radius: 4px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	}
+
+	.dropdown:hover ul {
+		display: block;
+	}
+
+	.dropdown ul li {
+		padding: 8px 16px;
+		cursor: pointer;
+	}
+
+	.dropdown ul li:hover {
+		background-color: #f4f4f4;
+	}
+
+	input:checked ~ .dot {
+		transform: translateX(100%);
+		background-color: #48bb78;
+	}
+
+	.dot {
+		transition: transform 0.3s ease-in-out;
 	}
 </style>

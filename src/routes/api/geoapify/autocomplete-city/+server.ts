@@ -8,7 +8,7 @@ export const POST: RequestHandler = async (event) => {
     const apiKey = process.env.GEOAPIFY_API!
     console.log(searchText)
 
-    const ret = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&format=json&apiKey=${apiKey}`)
+    const ret = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${searchText}&type=city&format=json&apiKey=${apiKey}`)
     const res = await ret.json()
 
     return new Response(
