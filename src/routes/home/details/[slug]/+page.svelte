@@ -214,10 +214,10 @@
 		<div class="mt-[20px] w-9/10 md:w-4/5 xl:w-4/5">
 			<p class="text-[30px]">Reviews:</p>
 			<div>
-				{#each reviews as review, index}
+				{#each data.allReviews as review, index}
 					<div class="border-2 shadow-sm m-2 my-3 p-4">
 						<div class="flex items-center">
-							<p class="text-[28px] font-bold mr-2">{review.user}</p>
+							<p class="text-[28px] font-bold mr-2">{review.reviewerName}</p>
 
 							<div class="flex">
 								{#each Array.from({ length: review.star }) as _, index}
@@ -245,6 +245,7 @@
 								{/each}
 							</div>
 						</div>
+						<p>{review.createdAt}</p>
 						<p>{review.comment}</p>
 					</div>
 				{/each}
@@ -314,9 +315,7 @@
 	</div>
 </div>
 
-<!-- <pre>{JSON.stringify(data.res, null, 2)}</pre>
-<pre>{JSON.stringify(data.weatherData, null, 2)}</pre>
-<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre> -->
+<pre>{JSON.stringify(data.allReviews, null, 2)}</pre>
 
 <style>
 	.chipi {
