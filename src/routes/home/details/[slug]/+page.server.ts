@@ -1,14 +1,18 @@
 import { fail, redirect } from '@sveltejs/kit'
 import { error } from '@sveltejs/kit';
 import type { Actions } from './$types';
+import type { user } from '$lib/server/schema';
 
-let userNow;
+let userNow: user;
 let place_id;
-export const load = async ({ locals:{supabase}, params, fetch }) => {
+export const load = async ({ locals: { supabase }, params, fetch }) => {
 
     place_id = params.slug;
     console.log("Place Id: ", place_id);
     let email = (await supabase.auth.getUser()).data.user?.email;
+
+    console.log("Amar email hoilo")
+    console.log(email)
 
 
     const ret0 = await fetch('/api/user/get', {
@@ -35,18 +39,18 @@ export const load = async ({ locals:{supabase}, params, fetch }) => {
         body: JSON.stringify({ place_id: place_id })
     });
     const res = await ret.json()
-    console.log(res)
+    // console.log(res)
 
     const lat = res.features[0].properties.lat
     const lon = res.features[0].properties.lon
-    console.log(lat, lon)
+    // console.log(lat, lon)
 
     const ret2 = await fetch('/api/weather', {
         method: 'POST',
         body: JSON.stringify({ lat: lat, lon: lon })
     });
     let weatherData = await ret2.json()
-    console.log(weatherData)
+    // console.log(weatherData)
 
 
     const ret3 = await fetch('/api/pollution', {
@@ -54,7 +58,7 @@ export const load = async ({ locals:{supabase}, params, fetch }) => {
         body: JSON.stringify({ lat: lat, lon: lon })
     });
     let pollutionData = await ret3.json()
-    console.log(pollutionData)
+    // console.log(pollutionData)
 
     const ret4 = await fetch('/api/review/get-place-review', {
         method: 'POST',
@@ -71,21 +75,22 @@ export const actions = {
     query: async (event) => {
         console.log("backend");
         const data = await event.request.formData();
+
         // data.append('categories', 'education, commercial');
         console.log(data.get("categories"))
 
 
         let queryData = Object.fromEntries(data.entries()) as any;
+        queryData.append('reviewerId', userNow.userId)
+        queryData.append('placeId', place_id)
 
         console.log(queryData)
 
         await event.fetch('/api/review/add', {
             method: 'POST',
-            body: JSON.stringify({ reviewerId: userNow.id, placeId: place_id, star: queryData.stars, comment: queryData.comment })
+            body: queryData
         })
-        return message(form, 'Signup Successful. Please check mail', {
-            status: 200
-        })
+
 
 
         // let lat = queryData.lat;
@@ -99,10 +104,10 @@ export const actions = {
         // const res = await ret.json()
         // // console.log(res)
 
-        // return {
-        //     success: 'done',
-        //     returned: res
-        // };
+        return {
+            success: 'done',
+
+        };
 
 
         // // throw redirect(303, '/auth/search');

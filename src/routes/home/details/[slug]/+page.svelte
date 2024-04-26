@@ -319,9 +319,9 @@
 	</div>
 </div>
 
-<pre>{JSON.stringify(data.res, null, 2)}</pre>
+<!-- <pre>{JSON.stringify(data.res, null, 2)}</pre>
 <pre>{JSON.stringify(data.weatherData, null, 2)}</pre>
-<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre>
+<pre>{JSON.stringify(data.pollutionData, null, 2)}</pre> -->
 
 <style>
 	.chipi {
