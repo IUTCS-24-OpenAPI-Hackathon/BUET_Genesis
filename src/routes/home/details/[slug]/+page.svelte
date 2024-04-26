@@ -3,6 +3,8 @@
 	import wind from '$lib/images/wind.png';
 	import { enhance } from '$app/forms';
 	import missing from '$lib/images/missing-svgrepo-com.svg';
+	import { page } from '$app/stores';
+	const { slug } = $page.params;
 
 	export let data;
 	let features = data.res.features;
@@ -32,6 +34,10 @@
 		}, 10000);
 	}
 
+	function gowriteblog() {
+		window.open(`/home/blogwrite/${slug}`);
+	}
+
 	const reviews = [
 		{
 			id: 1,
@@ -58,13 +64,20 @@
 </script>
 
 <div class="mt-6 mx-6">
-	<div class="m-2">
-		<button
-			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-			on:click={() => window.history.back()}
-		>
-			Go Back
-		</button>
+	<div class="m-2 flex flex-row justify-between">
+		<a href="/home/search">
+			<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+				Go Back
+			</button>
+		</a>
+		{#if data.res.features}
+			<button
+				class="bg-green-400 hover:bg-green-500 text-white font-bold py-2 px-4 rounded"
+				on:click={gowriteblog}
+			>
+				+ Add an experience here
+			</button>
+		{/if}
 	</div>
 	<div class="flex justify-center">
 		<div class="w-9/10 md:w-4/5 xl:w-4/5">
@@ -225,7 +238,6 @@
 										class="star h-5 w-5 fill-current star-filled"
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
-										
 									>
 										<path
 											d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"

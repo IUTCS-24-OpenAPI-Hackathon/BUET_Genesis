@@ -4,12 +4,14 @@
 	import { enhance } from '$app/forms';
 	import { onMount } from 'svelte';
 	import 'quill/dist/quill.snow.css';
+	import { page } from '$app/stores';
+	const { slug } = $page.params;
 
 	let quill;
 	let editor;
 
 	let title;
-	let description;
+
 	let content;
 
 	let tags;
@@ -70,9 +72,18 @@
 </script>
 
 <div class="min-h-screen mt-6 ml-16 mr-16">
+	<a href="/home/details/{slug}" class="mt-6 mb-6 text-left">
+		<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+			Go Back
+		</button>
+	</a>
 	<h1 class="text-2xl font-extrabold">Creating a New Blog</h1>
 	<form
-		use:enhance
+		use:enhance={() => {
+			return async ({ update }) => {
+				update({ reset: false });
+			};
+		}}
 		action="?/create"
 		method="POST"
 		class="mt-6"
@@ -84,37 +95,26 @@
 			<span>Blog Title</span>
 		</label>
 		<input
-			class="input mb-4 w-full"
+			class="input mb-4 w-full border border-slate-400"
 			type="text"
-			id="title"
-			name="title"
+			id="blogTitle"
+			name="blogTitle"
 			bind:value={title}
 			placeholder="Enter The Title of the Blog"
-		/>
-		<label for="description" class="label text-left mb-3 font-semibold">
-			<span>Blog Description</span>
-		</label>
-		<input
-			class="input mb-4 w-full"
-			type="text"
-			id="description"
-			name="description"
-			bind:value={description}
-			placeholder="Enter Brief Description"
 		/>
 
 		<label for="tags" class="label text-left mb-3 font-semibold">
 			<span>Tags</span>
 		</label>
 		<input
-			class="input mb-4 w-full"
+			class="input mb-4 w-full border border-slate-400"
 			type="text"
 			id="tags"
 			name="tags"
 			bind:value={tags}
 			placeholder="Tags (separate by comma)"
 		/>
-		<input hidden id="content" name="content" bind:value={content} />
+		<input hidden id="blogContent" name="blogContent" bind:value={content} />
 		<div class="grid gap-2 mt-4">
 			<label for="content" class="font-semibold">Blog Content</label>
 			<div bind:this={editor} id="editor" />
