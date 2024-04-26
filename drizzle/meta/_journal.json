@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1714064288460,
+      "tag": "0000_youthful_prism",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1714064884140,
+      "tag": "0001_dark_old_lace",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1714065574380,
+      "tag": "0002_useful_vivisector",
+      "breakpoints": true
+    }
+  ]
+}
