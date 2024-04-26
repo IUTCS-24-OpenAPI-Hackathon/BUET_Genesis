@@ -477,6 +477,13 @@
 	$: {
 		console.log(isNoneSelected);
 	}
+
+	let isMap = false
+
+	const mapfunc = ()=>{
+		func();
+		isMap = !isMap;
+	}
 </script>
 
 <div class="flex flex-col items-center justify-center mt-10">
@@ -661,46 +668,77 @@
 
 {#if locations}
 	{#if locations.length > 0}
-		<div class="grid grid-cols-3 gap-4 my-5">
-			{#each locations as location}
-				{#if location.properties.name}
-					<a href="./details/{location.properties.place_id}">
-						<div
-							class="border border-slate-300 border-rounded card w-96 bg-base-100 shadow-xl hover:scale-105 mx-5"
-						>
-							<div class="card-body">
-								<h2 class="card-title">
-									{location.properties.name}
-								</h2>
-								{#if location.properties.street}
-									<p>Street: {location.properties.street}</p>
-								{/if}
-								{#if location.properties.suburb}
-									<p>Suburb: {location.properties.suburb}</p>
-								{/if}
-								{#if location.properties.city}
-									<p>City: {location.properties.city}</p>
-								{/if}
-								{#if location.properties.postcode}
-									<p>Postcode: {location.properties.postcode}</p>
-								{/if}
+			<div class="flex items-center mt-10 ml-10">
+				<!-- map toggle -->
+				<div>
+					<label for="toggleC" class="flex items-center cursor-pointer">
+						<!-- toggle -->
+						<div class="relative">
+							<!-- input -->
+							<input
+								type="checkbox"
+								id="toggleC"
+								class="sr-only"
+								on:click={() => mapfunc()}
+							/>
+							<!-- line -->
+							<div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+							<!-- dot -->
+							<div
+								class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"
+							></div>
+						</div>
+						<!-- label -->
+						<div class="ml-3 text-gray-700 font-medium">
+							{isMap ? 'List View' : 'Map View'}
+						</div>
+					</label>
+				</div>
+			</div>
 
-								<div class="card-actions justify-end">
-									{#each location.properties.categories as category}
-										{#if !category.includes('.')}
-											<div class="badge badge-outline">{category}</div>
-										{/if}
-									{/each}
+			{#if !isMap}
+			<div class="grid grid-cols-3 gap-4 my-5">
+				{#each locations as location}
+					{#if location.properties.name}
+						<a href="./details/{location.properties.place_id}">
+							<div
+								class="border border-slate-300 border-rounded card w-96 bg-base-100 shadow-xl hover:scale-105 mx-5"
+							>
+								<div class="card-body">
+									<h2 class="card-title">
+										{location.properties.name}
+									</h2>
+									{#if location.properties.street}
+										<p>Street: {location.properties.street}</p>
+									{/if}
+									{#if location.properties.suburb}
+										<p>Suburb: {location.properties.suburb}</p>
+									{/if}
+									{#if location.properties.city}
+										<p>City: {location.properties.city}</p>
+									{/if}
+									{#if location.properties.postcode}
+										<p>Postcode: {location.properties.postcode}</p>
+									{/if}
+
+									<div class="card-actions justify-end">
+										{#each location.properties.categories as category}
+											{#if !category.includes('.')}
+												<div class="badge badge-outline">{category}</div>
+											{/if}
+										{/each}
+									</div>
 								</div>
 							</div>
-						</div>
-					</a>
-				{/if}
-			{/each}
-		</div>
-		<div id="mapElement" style="height: 500px;" class="rounded-lg shadow-md ml-10 mr-10 mt-6" />
-		<!-- <div id="hospital-map" style="height: 500px;" class="rounded-lg shadow-md" /> -->
-		<!-- <div bind:this={mapElement}>My Map</div> -->
+						</a>
+					{/if}
+				{/each}
+			</div>
+			{:else}
+			<div id="mapElement" style="height: 500px;" class="rounded-lg shadow-md ml-10 mr-10 mt-6" />
+			<!-- <div id="hospital-map" style="height: 500px;" class="rounded-lg shadow-md" /> -->
+			<!-- <div bind:this={mapElement}>My Map</div> -->
+			{/if}
 	{:else if showMessage}
 		<div class="flex flex-col justify-center items-center">
 			<div class="text-xl mt-20 text-red-500 bg-red-200 rounded-xl p-3">
