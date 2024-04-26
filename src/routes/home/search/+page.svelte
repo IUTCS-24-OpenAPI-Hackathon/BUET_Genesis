@@ -1,9 +1,14 @@
 <script lang="ts">
 	import _ from 'lodash'; // Import lodash library using default export
 	const debounce = _.debounce; // Extract debounce function from lodash
+	import 'leaflet/dist/leaflet.css';
 	import { onMount } from 'svelte';
 	import { enhance } from '$app/forms';
 	import type { ActionData, PageData } from './$types';
+	import { browser } from '$app/environment';
+
+	// import L from 'leaflet';
+	// import 'leaflet/dist/leaflet.css';
 
 	// import { enhance } from '$app/forms';
 	// import { goto } from '$app/navigation';
@@ -40,7 +45,200 @@
 			clearInterval(timerId);
 		}
 	}
+	// async function getAllLocation() {
+	// 	const mymap = L.map('Places-Position').setView([23.8103, 90.4125], 7);
+	// 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	// 		attribution: '&copy; OpenStreetMap contributors'
+	// 	}).addTo(mymap);
 
+	// 	const customIcon = L.icon({
+	// 		iconUrl:
+	// 			'https://aaitclybvvendvuswytq.supabase.co/storage/v1/object/public/BDeHR/mainlogoBag.png',
+	// 		iconSize: [30, 30],
+	// 		iconAnchor: [15, 40],
+	// 		popupAnchor: [0, -40]
+	// 	});
+
+	// 	hospitals.forEach((hospital) => {
+	// 		L.marker([hospital.latitude, hospital.longitude], {
+	// 			icon: customIcon
+	// 		})
+	// 			.addTo(hospitalMap)
+	// 			.bindPopup(
+	// 				`<b>${hospital.name}</b><br>Lat: ${hospital.latitude}, Lon: ${hospital.longitude}`
+	// 			)
+	// 			.openPopup();
+	// 	});
+	// }
+	// let mapElement;
+	// let map;
+
+	$: if (locations) {
+		if (locations.length > 0) {
+			func();
+		}
+	}
+	async function func() {
+		if (browser) {
+			const leaflet = await import('leaflet');
+
+			const myMap = leaflet.map('mapElement').setView([23.8103, 90.4125], 7);
+
+			leaflet
+				.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					// attribution:
+					// 	'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+					attribution: '&copy; OpenStreetMap contributors'
+				})
+				.addTo(myMap);
+
+			// import airport from '$lib/images/airport.svg';
+			// import entertainment from '$lib/images/entertainment-svgrepo-com.svg';
+			// import educational from '$lib/images/educational.png';
+			// import heritage from '$lib/images/heritage.png';
+			// import hoppital from '$lib/images/hospital.png';
+			// import sports from '$lib/images/sports.png';
+			// import commercial from '$lib/images/transportation-commercial-svgrepo-com.svg';
+
+			const customIcon_airport = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/airport.svg',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_entertainment = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/entertainment-svgrepo-com.svg',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_educational = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/educational.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_heritage = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/heritage.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_sports = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/sports.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_commercial = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/transportation-commercial-svgrepo-com.svg',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+			const customIcon_hoppital = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/hospital.png',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+
+			locations.forEach((location) => {
+				console.log(location.properties.name, location.properties.lat);
+
+				if (location.properties.categories[0] == 'education') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_educational
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'airport') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_airport
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'entertainment') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_entertainment
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'commercial') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_commercial
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'healthcare') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_hoppital
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'sport') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_sports
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+				if (location.properties.categories[0] == 'heritage') {
+					leaflet
+						.marker([location.properties.lat, location.properties.lon], {
+							icon: customIcon_heritage
+						})
+						.addTo(myMap)
+						.bindPopup(
+							`<b>${location.properties.name}</b><br>Lat: ${location.properties.lat}, Lon: ${location.properties.lon}`
+						)
+						.openPopup();
+				}
+			});
+
+			// leaflet
+			// 	.marker([51.5, -0.09])
+			// 	.addTo(map)
+			// 	.bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+			// 	.openPopup();
+		}
+	}
 	onMount(() => {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
@@ -466,11 +664,6 @@
 		<div class="grid grid-cols-3 gap-4 my-5">
 			{#each locations as location}
 				{#if location.properties.name}
-					<!-- <div class="border border-black m-5">
-			<a href="./details/{location.properties.place_id}">
-				{location.properties.city}
-			</a>
-		</div> -->
 					<a href="./details/{location.properties.place_id}">
 						<div
 							class="border border-slate-300 border-rounded card w-96 bg-base-100 shadow-xl hover:scale-105 mx-5"
@@ -505,6 +698,9 @@
 				{/if}
 			{/each}
 		</div>
+		<div id="mapElement" style="height: 500px;" class="rounded-lg shadow-md ml-10 mr-10 mt-6" />
+		<!-- <div id="hospital-map" style="height: 500px;" class="rounded-lg shadow-md" /> -->
+		<!-- <div bind:this={mapElement}>My Map</div> -->
 	{:else if showMessage}
 		<div class="flex flex-col justify-center items-center">
 			<div class="text-xl mt-20 text-red-500 bg-red-200 rounded-xl p-3">
@@ -519,6 +715,8 @@
 		</div>
 	</div>
 {/if}
+
+<pre>{JSON.stringify(locations, null, 2)}</pre>
 
 <!-- <h1>Your Current Location</h1>
 <p>Latitude: {lat}</p>
@@ -605,5 +803,10 @@ name, street, suburb, city, postcode, categories(its an array)
 	/* Firefox */
 	input[type='number'] {
 		-moz-appearance: textfield;
+	}
+
+	#map {
+		width: 100%;
+		height: 100%;
 	}
 </style>

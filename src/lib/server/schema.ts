@@ -20,7 +20,7 @@ export const userTable = pgTable('user_table', {
     imageLink: text('image_link')
 });
 
-export const revirwTable = pgTable('review_table', {
+export const reviewTable = pgTable('review_table', {
 	reviewId: serial('review_id').primaryKey().notNull(),
 	reviewerId: text('reviewerId').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
 	.notNull(),
