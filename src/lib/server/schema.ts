@@ -11,6 +11,7 @@ import {
 import { relations } from 'drizzle-orm';
 
 export type user = typeof userTable.$inferInsert;
+export type review = typeof reviewTable.$inferInsert;
 
 export const userTable = pgTable('user_table', {
 	userId: text('user_id').primaryKey().notNull(),
@@ -18,4 +19,13 @@ export const userTable = pgTable('user_table', {
 	email: text('email').notNull(),
     imageLink: text('image_link')
 });
+
+export const revirwTable = pgTable('review_table', {
+	reviewId: serial('review_id').primaryKey().notNull(),
+	reviewerId: text('reviewerId').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
+	.notNull(),
+	placeId: text('place_id').notNull(),
+	star: integer('star').notNull(),
+	comment: text('comment').notNull()
+})
 

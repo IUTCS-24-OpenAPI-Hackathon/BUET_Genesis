@@ -8,7 +8,15 @@ export const actions = {
         const data = await event.request.formData();
         // data.append('categories', 'education, commercial');
         console.log(data.get("categories"))
+        
+        if(data.get("categories")==""){
+            return {
+                success: 'nope',
+                returned: []
+            };
+        }
 
+        const searchType = data.get("searchType")
 
         let queryData = Object.fromEntries(data.entries()) as any;
         console.log(queryData)
@@ -18,17 +26,30 @@ export const actions = {
         // let lon = queryData.lon;
         // let rng = queryData.rng;
 
-        const ret = await event.fetch('/api/geoapify/radius-search', {
-            method: 'POST',
-            body: JSON.stringify(queryData)
-        });
-        const res = await ret.json()
-        console.log(res)
+        if(searchType == "radius"){
+            const ret = await event.fetch('/api/geoapify/radius-search', {
+                method: 'POST',
+                body: JSON.stringify(queryData)
+            });
+            const res = await ret.json()
+            return {
+                success: 'done',
+                returned: res
+            };
+        }
+        else{
+            const ret = await event.fetch('/api/geoapify/city-search', {
+                method: 'POST',
+                body: JSON.stringify(queryData)
+            });
+            const res = await ret.json()
+            return {
+                success: 'done',
+                returned: res
+            };
+        }
 
-        return {
-            success: 'done',
-            returned: res
-        };
+       
 
 
         // throw redirect(303, '/auth/search');

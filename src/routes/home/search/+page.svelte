@@ -17,6 +17,9 @@
 	let lon = 'Fetching...';
 	let myLat = 'Fetching...';
 	let myLon = 'Fetching...';
+	let placeId = 'Fetching...';
+	let myPlaceId = 'Fetching...';
+	let otherPlaceId = 'Fetching...';
 	let otherLat = 'Fetching...';
 	let otherLon = 'Fetching...';
 	let rng: any;
@@ -32,7 +35,8 @@
 			locations = form?.returned.features;
 			console.log(locations);
 			isLoading = false;
-			form == null;
+			form = null;
+			clearInterval(timerId)
 		}
 	}
 
@@ -42,6 +46,7 @@
 				(position) => {
 					myLat = position.coords.latitude;
 					myLon = position.coords.longitude;
+					getCurrentPlaceId();
 				},
 				(error) => {
 					console.error(error);
@@ -54,10 +59,23 @@
 			lon = 'Geolocation is not supported by this browser.';
 		}
 	});
+
+	async function getCurrentPlaceId() {
+		const ret = await fetch(`/api/geoapify/details-latlon`, {
+			method: 'POST',
+			body: JSON.stringify({ lat: myLat, lon: myLon })
+		});
+		const res = await ret.json();
+
+		myPlaceId = res.features[0].properties.place_id;
+		console.log(myPlaceId);
+	}
+
 	let isLoading = false;
+	let timerId: any
 	async function onSubmit() {
 		isLoading = true;
-		setTimeout(() => {
+		timerId = setTimeout(() => {
 			isLoading = false;
 		}, 10000);
 	}
@@ -172,10 +190,11 @@
 	}
 
 	let address = '';
-	let suggestions: any = [];
+	$: suggestions = [];
 	let showSuggestions = false;
 
-	const debouncedFetchSuggestions = debounce(fetchSuggestions, 500);
+	const debouncedFetchSuggestions = debounce(fetchSuggestions, 1000);
+	const debouncedFetchSuggestions2 = debounce(fetchSuggestions2, 1000);
 
 	async function fetchSuggestions() {
 		const ret = await fetch(`/api/geoapify/autocomplete`, {
@@ -189,28 +208,54 @@
 		console.log(suggestions);
 	}
 
+	async function fetchSuggestions2() {
+		const ret = await fetch(`/api/geoapify/autocomplete-city`, {
+			method: 'POST',
+			body: JSON.stringify({ address: address })
+		});
+		const res = await ret.json();
+		suggestions = res.results;
+		showSuggestions = true;
+
+		console.log(suggestions);
+	}
+
 	function handleInput(event) {
 		address = event.target.value;
-		debouncedFetchSuggestions();
+		if (isSearchInALocation) {
+			debouncedFetchSuggestions2();
+		} else {
+			debouncedFetchSuggestions();
+		}
 	}
 
 	function selectSuggestion(suggestion: any) {
 		address = suggestion.address_line1;
 		otherLat = suggestion.lat;
 		otherLon = suggestion.lon;
+		otherPlaceId = suggestion.place_id;
 		showSuggestions = false;
 	}
 
 	let isAutoLocation = false;
 	let isSearchInALocation = false;
+	let searchType = 'radius';
 
 	$: {
 		if (isAutoLocation) {
 			lat = myLat;
 			lon = myLon;
+			placeId = myPlaceId;
 		} else {
 			lat = otherLat;
 			lon = otherLon;
+			placeId = otherPlaceId;
+		}
+
+		if (isSearchInALocation) {
+			searchType = 'city';
+		} else {
+			searchType = 'radius';
 		}
 	}
 </script>
@@ -257,12 +302,21 @@
 			name="rng"
 			bind:value={rng}
 			disabled={isLoading || isSearchInALocation}
-			placeholder="Radius of search (in multiple of 100m)"
+			placeholder="Radius of search (in m)"
 		/>
 
 		<input hidden type="text" id="lat" name="lat" bind:value={lat} disabled={isLoading} />
 		<input hidden type="text" id="lon" name="lon" bind:value={lon} disabled={isLoading} />
+		<input
+			hidden
+			type="text"
+			id="placeId"
+			name="placeId"
+			bind:value={placeId}
+			disabled={isLoading}
+		/>
 		<input hidden type="text" id="categories" name="categories" bind:value={categories} />
+		<input hidden type="text" id="searchType" name="searchType" bind:value={searchType} />
 
 		<div class="flex felx-row justify-around">
 			<div class="flex items-center mt-10">
@@ -315,7 +369,7 @@
 						</div>
 						<!-- label -->
 						<div class="ml-3 text-gray-700 font-medium">
-							{isSearchInALocation ? 'Search in a radius' : 'Search in a location'}
+							{!isSearchInALocation ? 'Searching in a radius' : 'Searching in a location'}
 						</div>
 					</label>
 				</div>
