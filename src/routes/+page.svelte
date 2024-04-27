@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-
+	import explore from '$lib/images/explore.jpg'
 	import { onDestroy, onMount } from 'svelte';
 	import saveTime from '$lib/images/adventure.gif';
 
@@ -108,7 +108,7 @@
 			<div class="flex items-center justify-center h-[100%]">
 				<div class="grid grid-flow-row text-center w-[100%]">
 					<div class="flex items-center justify-center welcome-animation mb-14">
-						<p class="font-mono text-4xl font-extrabold">Welcome To</p>
+						<p class="font-serif text-4xl font-extrabold">Welcome To</p>
 					</div>
 					<div class=" animated-element flex items-center justify-center">
 						<!-- <p class=" md:text-[140px] lg:text-[150px] text-[90px] text-bold font-bold secondPhase">
@@ -117,42 +117,45 @@
 						<img src={genie} alt="logo" class="w-64 h-48 secondPhase align-middle" />
 					</div>
 					<div class=" flex items-center justify-center text-[20px] thirdPhase opacity-0">
-						<p class="font-semibold md:w-1/2 p-2">Voyager is an application about your surroundings. Explore and enlighten world about your area </p>
+						<p class="font-sans md:w-1/2 p-2">Voyager is an application about your surroundings. Explore and enlighten world about your area </p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="md:min-h-[90vh] bg-[#88ddff]">
+	<div class="md:min-h-[70vh] bg-[#88ddff] explore flex items-center">
 		<div class="md:grid lg:grid grid-cols-[50%_auto] h-full">
 			<div class="flex items-center justify-center">
-				<img src={saveTime} alt="" class="h-3/4" />
 			</div>
 			<div class="m-4 p-3 flex items-center justify-center">
-				<div class="save">
-					<p class="md:text-[80px] text-[60px] font-bold leading-tight">
-						Know your knowledge about your city.
+				<div class="save text-[#252525]">
+					<p class="md:text-[84px] text-[60px] font-bold leading-tight ">
+						Know about <br> your <span>City</span> 
 					</p>
-					<p class="text-[24px] md:w-3/4">Lorem Ipsum :</p>
+					<p class="text-[24px] md:w-3/4">
+						Understanding your city isn't just about knowing its streets; it's about discovering its vibrant places and hidden gems. Whether you're a longtime resident or a newcomer, embracing these places enriches your connection to your city
+					</p>
 				</div>
 			</div>
 		</div>
 	</div>
 	
-	<div class="md:min-h-[90vh] bg-[#fffd88]">
+	<div class="md:h-[70vh] bg-[#fffd88] share">
 		<div class="md:grid lg:grid grid-cols-[50%_auto] h-full">
-			<div class="flex items-center justify-center">
-				<img src={saveTime} alt="" class="h-3/4" />
-			</div>
 			<div class="m-4 p-3 flex items-center justify-center">
 				<div class="save">
 					<p class="md:text-[80px] text-[60px] font-bold leading-tight">
 						Share your experience
 					</p>
-					<p class="text-[24px] md:w-3/4">Lorem Ipsum :</p>
+					<p class="text-[24px] md:w-3/4">
+						Living in my city is like being part of a bustling mosaic of cultures, flavors, and experiences. Each day brings new discoveries and adventures. Share your experience with the world.
+					</p>
 				</div>
 			</div>
+			<div class="flex items-center justify-center">
+			</div>
+			
 		</div>
 	</div>
 
@@ -231,7 +234,18 @@
 		animation-range-start: 100px;
 		animation-range-end: 400px;
 	}
-
+	.explore{
+		background-repeat: no-repeat;
+		background-size: cover; /* Cover the entire background */
+        background-position: center; 
+		background-image: url("https://bsmedia.business-standard.com/_media/bs/img/article/2015-09/02/full/1441188813-5141.jpg?im=FeatureCrop,size=(826,465)") ;
+	}
+	.share{
+		background-repeat: no-repeat;
+		background-size: cover; /* Cover the entire background */
+        background-position: center; 
+		background-image: url("");
+	}
 	.titleSection {
 		background-attachment: fixed;
 		background-color: #f0e7c0;
