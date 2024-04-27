@@ -24,7 +24,14 @@ export async function insertBlog(newBlog: blog) {
 }
 
 export async function getPlaceBlog(placeId: string) {
-	return await db.select().from(blogTable).where(eq(blogTable.placeId, placeId))
+	return await db.select({
+		blogId: blogTable.blogId,
+		blogName: blogTable.blogName,
+		writerName: blogTable.writerName,
+		tags: blogTable.tags,
+		createdAt: blogTable.createdAt,
+		blogTitle: blogTable,blogTitle
+	}).from(blogTable).where(eq(blogTable.placeId, placeId))
 }
 
 export async function getSpecBlog(blogid: number) {
@@ -33,6 +40,19 @@ export async function getSpecBlog(blogid: number) {
 
 export async function insertNewExplored(newexplored: newexplored) {
 	await db.insert(newexploredTable).values(newexplored)
+}
+
+export async function getNewExploredBlog(){
+	return await db.select(
+		blogId: newexploredTable.blogId,
+		writerName: newexploredTable.writerName,
+		createdAt: newexploredTable.createdAt,
+		name: newexploredTable.name,
+		address: newexplored.address,
+		lat: newexploredTable.lat,
+		lon: newexploredTable.lon
+
+	).from(newexploredTable)
 }
 
 export async function getSpecExplored(blogid: number) {

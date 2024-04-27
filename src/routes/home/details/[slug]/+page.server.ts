@@ -26,10 +26,6 @@ export const load = async ({ locals: { supabase }, params, fetch }) => {
     // console.log("Ami holam");
     console.log("Loading: ", userNow)
 
-
-
-
-
     // const formData = new FormData();
     // formData.append('place_id', place_id);
 
@@ -44,33 +40,38 @@ export const load = async ({ locals: { supabase }, params, fetch }) => {
 
     const lat = res.features[0].properties.lat
     const lon = res.features[0].properties.lon
-    // console.log(lat, lon)
 
-    const ret2 = await fetch('/api/weather', {
-        method: 'POST',
-        body: JSON.stringify({ lat: lat, lon: lon })
-    });
-    let weatherData = await ret2.json()
-    // console.log(weatherData)
-
-
-    const ret3 = await fetch('/api/pollution', {
-        method: 'POST',
-        body: JSON.stringify({ lat: lat, lon: lon })
-    });
-    let pollutionData = await ret3.json()
-    // console.log(pollutionData)
-
-    const ret4 = await fetch('/api/review/get-place-review', {
-        method: 'POST',
-        body: JSON.stringify({ placeId: place_id })
-    });
-    let allReviews = await ret4.json()
+    async function getWeatherData(){
+        const ret = await fetch('/api/weather', {
+            method: 'POST',
+            body: JSON.stringify({ lat: lat, lon: lon })
+        });
+        const res = await ret.json()
+        return res
+    }
 
 
+    async function getPollutionData(){
+        const ret = await fetch('/api/pollution', {
+            method: 'POST',
+            body: JSON.stringify({ lat: lat, lon: lon })
+        });
+        const res = await ret.json()
+        return res
+    }
+
+    async function getReviewData(){
+        const ret = await fetch('/api/review/get-place-review', {
+            method: 'POST',
+            body: JSON.stringify({ placeId: place_id })
+        });
+        const res = await ret.json()
+
+        return res
+    }
 
 
-    return { res, weatherData, pollutionData, allReviews };
+    return { res, weatherData:getWeatherData(), pollutionData:getPollutionData(), allReviews:getReviewData() };
 }
 export const actions = {
     query: async (event) => {

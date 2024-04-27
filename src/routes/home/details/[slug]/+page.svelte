@@ -5,9 +5,11 @@
 	import missing from '$lib/images/missing-svgrepo-com.svg';
 	import { page } from '$app/stores';
 	const { slug } = $page.params;
+	import type { ActionData, PageData } from './$types';
 	import deafaultImage from '$lib/images/default.jpg';
+	import { onMount } from 'svelte';
 
-	export let data;
+	export let data: PageData;
 	let features = data.res.features;
 
 	let stars = 0;
@@ -60,6 +62,24 @@
 		}
 	];
 
+	let weatherData: any = null;
+	let pollutionData: any = null;
+	let allReviews: any = null;
+	onMount(() => {
+		data.weatherData.then((res) => {
+			weatherData = res;
+			console.log(weatherData)
+		});
+
+		data.pollutionData.then((res) => {
+			pollutionData = res;
+		});
+
+		data.allReviews.then((res) => {
+			allReviews = res;
+		});
+	});
+
 	// 	let { session, supabase, classNow, studclass } = data;
 	// 	$: ({ session, supabase, classNow, studclass } = data);
 </script>
@@ -80,260 +100,286 @@
 			</button>
 		{/if}
 	</div>
-	<div class="flex justify-center">
-		<div class="w-9/10 md:w-4/5 xl:w-4/5">
-			{#if data.res.features}
-				{#if data.res.features[0].properties.name}
-					<h1 class="text-3xl font-extrabold">{data.res.features[0].properties.name}</h1>
-				{:else if data.res.features[0].properties.name_international.en}
-					<h1 class="text-3xl font-extrabold">
-						{data.res.features[0].properties.name_international.en}
-					</h1>
-				{:else if data.res.features[0].properties.name_international.bn}
-					<h1 class="text-3xl font-extrabold">
-						{data.res.features[0].properties.name_international.bn}
-					</h1>
-				{:else}
-					<h1 class="text-3xl font-extrabold">Name Not Found</h1>
-				{/if}
-				<p class="text-xl">GMT {data.res.features[0].properties.timezone.offset_STD}</p>
-				<p class="mt-2">{data.res.features[0].properties.address_line2}</p>
-				<div class="flex space-x-2 mt-2">
-					{#each data.res.features[0].properties.categories as category}
-						{#if !category.includes('.')}
-							<p class="py-1 px-2 bg-gray-400 text-white rounded">
-								{category}
-							</p>
+	<div role="tablist" class="tabs tabs-bordered">
+		<input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Place Details"  checked/>
+		<div role="tabpanel" class="tab-content p-10">
+			<div class="flex justify-center">
+				<div class="w-9/10 md:w-4/5 xl:w-4/5">
+					{#if data.res.features}
+						{#if data.res.features[0].properties.name}
+							<h1 class="text-3xl font-extrabold">{data.res.features[0].properties.name}</h1>
+						{:else if data.res.features[0].properties.name_international.en}
+							<h1 class="text-3xl font-extrabold">
+								{data.res.features[0].properties.name_international.en}
+							</h1>
+						{:else if data.res.features[0].properties.name_international.bn}
+							<h1 class="text-3xl font-extrabold">
+								{data.res.features[0].properties.name_international.bn}
+							</h1>
+						{:else}
+							<h1 class="text-3xl font-extrabold">Name Not Found</h1>
 						{/if}
-					{/each}
-
-					<!-- <p class="py-1 px-2 bg-gray-400 text-white rounded">
-					{data.res.features[0].properties.datasource.raw.amenity}
-				</p> -->
-				</div>
-				<!-- Address -->
-				<div class="mt-4">
-					<h2 class="text-lg font-medium">Address:</h2>
-					<div class="ml-3">
-						{#if data.res.features[0].properties.street}
-							<p>Street: {data.res.features[0].properties.street}</p>
-						{/if}
-						{#if data.res.features[0].properties.city}
-							<p>City: {data.res.features[0].properties.city}</p>
-						{/if}
-						{#if data.res.features[0].properties.state}
-							<p>State: {data.res.features[0].properties.state}</p>
-						{/if}
-						{#if data.res.features[0].properties.country}
-							<p>Country: {data.res.features[0].properties.country}</p>
-						{/if}
-						{#if data.res.features[0].properties.postal}
-							<p>Postal Code: {data.res.features[0].properties.postal}</p>
-						{/if}
-					</div>
-				</div>
-			{/if}
-			<!-- Weather -->
-			{#if data.weatherData.current}
-				<div class="mt-4">
-					<!-- Weather -->
-					<div class="mt-2">
-						<p class="text-[22px] font-medium">Weather:</p>
-						<div class="ml-2">
-							<div class="border-2 rounded-lg py-2">
-								<div class="flex items-center">
-									<img src={data.weatherData.current.condition.icon} alt="" />
-									<p>
-										<span class="text-[25px]">{data.weatherData.current.temp_c}<sup>o</sup></span>
-										<span> feels like {data.weatherData.current.feelslike_c}<sup>o</sup></span>
+						<p class="text-xl">GMT {data.res.features[0].properties.timezone.offset_STD}</p>
+						<p class="mt-2">{data.res.features[0].properties.address_line2}</p>
+						<div class="flex space-x-2 mt-2">
+							{#each data.res.features[0].properties.categories as category}
+								{#if !category.includes('.')}
+									<p class="py-1 px-2 bg-gray-400 text-white rounded">
+										{category}
 									</p>
-								</div>
-								<div class="flex items-center space-x-2 mx-3">
-									<img src={wind} alt="" class="w-5" />
-
-									<p>
-										<span>{data.weatherData.current.wind_mph}mile/h</span>
-										<span
-											>{data.weatherData.current.wind_degree}<sup>o</sup>
-											{data.weatherData.current.wind_dir}</span
-										>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Air pollution -->
-				</div>
-			{:else}
-				<div class="mt-4">
-					<h2 class="text-lg font-medium">Weather:</h2>
-
-					<!-- Weather -->
-					<div class="mt-2">
-						<p class="text-[22px] font-medium">Weather:</p>
-						<div class="ml-2">
-							<div class="border-2 rounded-lg py-2">
-								<div class="flex items-center">
-									<img src={missing} alt="" class="w-8 h-8" />
-									<p>
-										<span class="text-[25px]">API_ERROR</span>
-										<!-- <span> feels {data.weatherData.current.feelslike_c}<sup>o</sup></span> -->
-									</p>
-								</div>
-								<div class="flex items-center space-x-2 mx-3">
-									<img src={wind} alt="" class="w-5" />
-
-									<p>
-										<span>NO DATA FOUND :</span>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<!-- Air pollution -->
-				</div>
-			{/if}
-			<!-- Air Quality -->
-			{#if data.pollutionData.list}
-				<div class="mt-4">
-					<h2 class="text-lg font-medium">Air Quality:</h2>
-					<div class="ml-3">
-						<p>
-							Air Quality Index: {data.pollutionData.list[0].main.aqi}
-							{#if data.pollutionData.list[0].main.aqi == 1}
-								<span class="badge p-3 bg-green-500">Good</span>
-							{:else if data.pollutionData.list[0].main.aqi == 2}
-								<span class="badge p-3 bg-green-300">Fair</span>
-							{:else if data.pollutionData.list[0].main.aqi == 3}
-								<span class="badge p-3 bg-orange-300">Moderate</span>
-							{:else if data.pollutionData.list[0].main.aqi == 4}
-								<span class="badge p-3 bg-red-300">Poor</span>
-							{:else if data.pollutionData.list[0].main.aqi == 5}
-								<span class="badge p-3 bg-red-500">Very Poor</span>
-							{/if}
-						</p>
-					</div>
-				</div>
-			{:else}
-				<div class="mt-4">
-					<h2 class="text-lg font-medium">API ERROR</h2>
-				</div>
-			{/if}
-		</div>
-	</div>
-
-	<div class="flex justify-center">
-		<div class="mt-[20px] w-9/10 md:w-4/5 xl:w-4/5">
-			<p class="text-[30px]">Reviews:</p>
-			<div>
-				{#each data.allReviews as review, index}
-					<div class="flex my-5">
-						<div class="mr-3 flex-shrink-0">
-							<img class="mt-2 h-8 w-8 rounded-full sm:h-10 sm:w-10" src={deafaultImage} alt="" />
-						</div>
-						<div class="flex-1 rounded-lg border px-4 py-2 leading-relaxed sm:px-6 sm:py-4">
-							<strong>{review.reviewerName}</strong>
-							<span class="text-xs text-gray-400">{review.createdAt.toString().split('T')[0]}</span>
-							<span class="flex flex-row">
-								{#each Array.from({ length: review.star }) as _, index}
-									<svg
-										class="star h-4 w-4 fill-current star-filled"
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 20 20"
-									>
-										<path
-											d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
-										/>
-									</svg>
-								{/each}
-								{#each Array.from({ length: 5 - review.star }) as _, index}
-									<svg
-										class="star h-4 w-4 fill-current star_"
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 20 20"
-									>
-										<path
-											d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
-										/>
-									</svg>
-								{/each}
-							</span>
-
-							<p class="text-sm mt-3">
-								{review.comment}
-							</p>
-						</div>
-					</div>
-				{/each}
-			</div>
-
-			<form
-				use:enhance
-				action="?/query"
-				method="POST"
-				on:submit={() => {
-					onSubmit();
-				}}
-			>
-				<div class="max-w-lg">
-					<h1 class="text-3xl font-medium mb-6">Leave a Review</h1>
-
-					<div class="flex items-center mb-4">
-						<span class="mr-2 text-lg">Stars:</span>
-						<div class="flex">
-							{#each Array.from({ length: 5 }) as _, index}
-								<svg
-									class="star h-8 w-8 fill-current {index < stars ? 'star-filled' : ''}"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									on:click={() => handleStarHover(index + 1)}
-									on:mouseover={() => handleStarHover(index + 1)}
-									on:mouseleave={handleStarLeave}
-								>
-									<path d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z" />
-								</svg>
+								{/if}
 							{/each}
+
+							<!-- <p class="py-1 px-2 bg-gray-400 text-white rounded">
+							{data.res.features[0].properties.datasource.raw.amenity}
+						</p> -->
 						</div>
-						<span class="ml-2">{stars}/5</span>
-					</div>
-					<input
-						hidden
-						type="number"
-						id="star"
-						name="star"
-						bind:value={stars}
-						disabled={isLoading}
-					/>
+						<!-- Address -->
+						<div class="mt-4">
+							<h2 class="text-lg font-medium">Address:</h2>
+							<div class="ml-3">
+								{#if data.res.features[0].properties.street}
+									<p>Street: {data.res.features[0].properties.street}</p>
+								{/if}
+								{#if data.res.features[0].properties.city}
+									<p>City: {data.res.features[0].properties.city}</p>
+								{/if}
+								{#if data.res.features[0].properties.state}
+									<p>State: {data.res.features[0].properties.state}</p>
+								{/if}
+								{#if data.res.features[0].properties.country}
+									<p>Country: {data.res.features[0].properties.country}</p>
+								{/if}
+								{#if data.res.features[0].properties.postal}
+									<p>Postal Code: {data.res.features[0].properties.postal}</p>
+								{/if}
+							</div>
+						</div>
+					{/if}
+					<!-- Weather -->
+					{#if weatherData}
+						{#if weatherData.current}
+							<div class="mt-4">
+								<!-- Weather -->
+								<div class="mt-2">
+									<p class="text-[22px] font-medium">Weather:</p>
+									<div class="ml-2">
+										<div class="border-2 rounded-lg py-2">
+											<div class="flex items-center">
+												<img src={weatherData.current.condition.icon} alt="" />
+												<p>
+													<span class="text-[25px]">{weatherData.current.temp_c}<sup>o</sup></span>
+													<span> feels like {weatherData.current.feelslike_c}<sup>o</sup></span>
+												</p>
+											</div>
+											<div class="flex items-center space-x-2 mx-3">
+												<img src={wind} alt="" class="w-5" />
 
-					<div class="mb-4">
-						<label for="comment" class="text-lg block mb-2">Comment:</label>
-						<textarea
-							id="comment"
-							name="comment"
-							bind:value={comment}
-							disabled={isLoading}
-							placeholder="Leave a comment"
-							class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
-							rows="4"
-						></textarea>
-					</div>
+												<p>
+													<span>{weatherData.current.wind_mph}mile/h</span>
+													<span
+														>{weatherData.current.wind_degree}<sup>o</sup>
+														{weatherData.current.wind_dir}</span
+													>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
 
-					<button
-						type="submit"
-						class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
-						on:click={handleSubmit}
-					>
-						Submit
-					</button>
+								<!-- Air pollution -->
+							</div>
+						{:else}
+							<div class="mt-4">
+								<h2 class="text-lg font-medium">Weather:</h2>
+
+								<!-- Weather -->
+								<div class="mt-2">
+									<p class="text-[22px] font-medium">Weather:</p>
+									<div class="ml-2">
+										<div class="border-2 rounded-lg py-2">
+											<div class="flex items-center">
+												<img src={missing} alt="" class="w-8 h-8" />
+												<p>
+													<span class="text-[25px]">API_ERROR</span>
+													<!-- <span> feels {weatherData.current.feelslike_c}<sup>o</sup></span> -->
+												</p>
+											</div>
+											<div class="flex items-center space-x-2 mx-3">
+												<img src={wind} alt="" class="w-5" />
+
+												<p>
+													<span>NO DATA FOUND :</span>
+												</p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Air pollution -->
+							</div>
+						{/if}
+					{:else}{/if}
+					<!-- Air Quality -->
+					{#if pollutionData}
+						{#if pollutionData.list}
+							<div class="mt-4">
+								<h2 class="text-lg font-medium">Air Quality:</h2>
+								<div class="ml-3">
+									<p>
+										Air Quality Index: {pollutionData.list[0].main.aqi}
+										{#if pollutionData.list[0].main.aqi == 1}
+											<span class="badge p-3 bg-green-500">Good</span>
+										{:else if pollutionData.list[0].main.aqi == 2}
+											<span class="badge p-3 bg-green-300">Fair</span>
+										{:else if pollutionData.list[0].main.aqi == 3}
+											<span class="badge p-3 bg-orange-300">Moderate</span>
+										{:else if pollutionData.list[0].main.aqi == 4}
+											<span class="badge p-3 bg-red-300">Poor</span>
+										{:else if pollutionData.list[0].main.aqi == 5}
+											<span class="badge p-3 bg-red-500">Very Poor</span>
+										{/if}
+									</p>
+								</div>
+							</div>
+						{:else}
+							<div class="mt-4">
+								<h2 class="text-lg font-medium">API ERROR</h2>
+							</div>
+						{/if}
+					{:else}{/if}
 				</div>
-			</form>
+			</div>
 		</div>
+
+		<input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Reviews" />
+		<div role="tabpanel" class="tab-content p-10">
+			<div class="flex justify-center">
+				<div class="mt-[20px] w-9/10 md:w-4/5 xl:w-4/5">
+					<p class="text-[30px]">Reviews:</p>
+					<form
+						use:enhance
+						action="?/query"
+						method="POST"
+						on:submit={() => {
+							onSubmit();
+						}}
+					>
+						<div class="max-w-lg">
+							<h1 class="text-3xl font-medium mb-6">Leave a Review</h1>
+
+							<div class="flex items-center mb-4">
+								<span class="mr-2 text-lg">Stars:</span>
+								<div class="flex">
+									{#each Array.from({ length: 5 }) as _, index}
+										<svg
+											class="star h-8 w-8 fill-current {index < stars ? 'star-filled' : ''}"
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 20 20"
+											on:click={() => handleStarHover(index + 1)}
+											on:mouseover={() => handleStarHover(index + 1)}
+											on:mouseleave={handleStarLeave}
+										>
+											<path
+												d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
+											/>
+										</svg>
+									{/each}
+								</div>
+								<span class="ml-2">{stars}/5</span>
+							</div>
+							<input
+								hidden
+								type="number"
+								id="star"
+								name="star"
+								bind:value={stars}
+								disabled={isLoading}
+							/>
+
+							<div class="mb-4">
+								<label for="comment" class="text-lg block mb-2">Comment:</label>
+								<textarea
+									id="comment"
+									name="comment"
+									bind:value={comment}
+									disabled={isLoading}
+									placeholder="Leave a comment"
+									class="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
+									rows="4"
+								></textarea>
+							</div>
+
+							<button
+								type="submit"
+								class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors mb-10"
+								on:click={handleSubmit}
+							>
+								Submit
+							</button>
+						</div>
+					</form>
+					<div>
+						{#if allReviews}
+						{#each allReviews as review, index}
+							<div class="flex my-5">
+								<div class="mr-3 flex-shrink-0">
+									<img
+										class="mt-2 h-8 w-8 rounded-full sm:h-10 sm:w-10"
+										src={deafaultImage}
+										alt=""
+									/>
+								</div>
+								<div class="flex-1 rounded-lg border px-4 py-2 leading-relaxed sm:px-6 sm:py-4">
+									<strong>{review.reviewerName}</strong>
+									<span class="text-xs text-gray-400"
+										>{review.createdAt.toString().split('T')[0]}</span
+									>
+									<span class="flex flex-row">
+										{#each Array.from({ length: review.star }) as _, index}
+											<svg
+												class="star h-4 w-4 fill-current star-filled"
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 20 20"
+											>
+												<path
+													d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
+												/>
+											</svg>
+										{/each}
+										{#each Array.from({ length: 5 - review.star }) as _, index}
+											<svg
+												class="star h-4 w-4 fill-current star_"
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 20 20"
+											>
+												<path
+													d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
+												/>
+											</svg>
+										{/each}
+									</span>
+
+									<p class="text-sm mt-3">
+										{review.comment}
+									</p>
+								</div>
+							</div>
+						{/each}
+						{:else}
+
+						{/if}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Blogs" />
+		<div role="tabpanel" class="tab-content p-10">Blogs</div>
 	</div>
 </div>
 
-<pre>{JSON.stringify(data.allReviews, null, 2)}</pre>
+<!-- <pre>{JSON.stringify(data.allReviews, null, 2)}</pre> -->
 
 <style>
 	.chipi {

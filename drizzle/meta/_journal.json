@@ -5,50 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1714064288460,
-      "tag": "0000_youthful_prism",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1714064884140,
-      "tag": "0001_dark_old_lace",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1714065574380,
-      "tag": "0002_useful_vivisector",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1714149583415,
-      "tag": "0003_slim_zzzax",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1714170218620,
-      "tag": "0004_tan_shockwave",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1714171191299,
-      "tag": "0005_curvy_sister_grimm",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1714177368071,
-      "tag": "0006_fine_vengeance",
+      "when": 1714177955266,
+      "tag": "0000_goofy_mockingbird",
       "breakpoints": true
     }
   ]

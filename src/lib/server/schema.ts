@@ -37,6 +37,7 @@ export const blogTable = pgTable('blog_table', {
 	blogId: serial("blog_id").primaryKey().notNull(),
 	writerId: text('writer_id').notNull().references(() => userTable.userId, { onDelete: 'cascade' })
 		.notNull(),
+	writerName: text('writer_name').notNull(),
 	placeId: text('place_id').notNull(),
 	blogTitle: text('blog_title').notNull(),
 	blogContent: text('blog_content').notNull(),
@@ -53,6 +54,7 @@ export const newexploredTable = pgTable('new_explored', {
 	address: text('address').notNull(),
 	lat: text('lat').notNull(),
 	lon: text('lon').notNull(),
+	writerName: text('writer_name').notNull(),
 	createdAt: timestamp('created_at').defaultNow(),
 	content: text('content').notNull(),
 })
