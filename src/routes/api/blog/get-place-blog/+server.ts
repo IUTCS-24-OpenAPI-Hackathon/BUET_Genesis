@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { getPlaceReview } from "$lib/server/queries"
+import { getPlaceBlog } from "$lib/server/queries"
 
 export const POST: RequestHandler = async (event) => {
     const data = await event.request.json()
