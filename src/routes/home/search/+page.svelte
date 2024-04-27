@@ -179,6 +179,7 @@
 			});
 
 			locations.forEach((location) => {
+				if(location.properties.name){
 				console.log(location.properties.name, location.properties.lat);
 				let myurl = `./details/${location.properties.place_id}`;
 				if (location.properties.categories[0] == 'education') {
@@ -302,6 +303,7 @@
 						)
 						.openPopup();
 				}
+			}
 			});
 
 			// leaflet

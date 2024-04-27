@@ -13,7 +13,7 @@
 	onMount(() => {
 		data.currentBlog.then((res) => {
 			currentBlog = res[0];
-			console.log(currentBlog);
+			// console.log(currentBlog);
 		});
 	});
 

@@ -102,10 +102,9 @@ export const actions = {
             body: JSON.stringify(queryData)
         })
 
-        return {
-            success: 'done',
-        };
-
+        // return {
+        //     success: 'done',
+        // };
 
         throw redirect(303, `/home/details/${place_id}`);
 
