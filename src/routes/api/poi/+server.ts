@@ -5,7 +5,7 @@ dotenv.config()
 export const POST: RequestHandler = async (event) => {
     const data = await event.request.json()
     const token = process.env.token!
-
+    console.log(data)
     const lat = data["lat"]
     const lon = data["lon"]
     const rad = data["rad"]

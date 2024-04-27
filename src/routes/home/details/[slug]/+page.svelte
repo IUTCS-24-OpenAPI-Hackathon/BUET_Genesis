@@ -9,6 +9,7 @@
 	import deafaultImage from '$lib/images/default.jpg';
 	import { onMount } from 'svelte';
 	import BlogSVG from '$lib/components/blogSVG.svelte';
+	import { Circle } from 'svelte-loading-spinners';
 
 	export let data: PageData;
 	let features = data.res.features;
@@ -107,6 +108,11 @@
 				+ Add an experience here
 			</button>
 		{/if}
+		<a href="/home/travel/{slug}">
+			<button class="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded">
+				Travel
+			</button>
+		</a>
 	</div>
 	<div role="tablist" class="tabs tabs-bordered">
 		<input
@@ -381,7 +387,11 @@
 									</div>
 								</div>
 							{/each}
-						{:else}{/if}
+						{:else}
+						<div class="flex h-full w-full items-center justify-center">
+							<Circle size="60" color="#FF3E00" unit="px" duration="1s" />
+						</div>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -424,11 +434,9 @@
 					</div>
 				{/if}
 			{:else}
-				<div class="flex flex-col justify-center items-center">
-					<div class="text-xl mt-20 text-red-500 bg-red-200 rounded-xl p-3">
-						Blogs not loaded yet
-					</div>
-				</div>
+			<div class="flex h-full w-full items-center justify-center">
+				<Circle size="60" color="#FF3E00" unit="px" duration="1s" />
+			</div>
 			{/if}
 		</div>
 	</div>
