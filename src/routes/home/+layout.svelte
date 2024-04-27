@@ -1,8 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import logo from '$lib/images/voyager.png';
-
+	export let data;
 	$: pathName = $page.url.pathname as string;
+	const handleSignOut = async () => {
+		console.log('logout start');
+		await data.supabase.auth.signOut();
+		console.log('logout done');
+		window.open('/login', '_self');
+	};
 </script>
 
 <body class="inset-0 flex min-h-screen w-full flex-col bg-white">
@@ -43,6 +49,7 @@
 						Unexplored
 					</a>
 				{/if}
+				<button class="btn btn-error rounded-lg" on:click={handleSignOut}> Logout </button>
 			</div>
 		</div>
 	</nav>
