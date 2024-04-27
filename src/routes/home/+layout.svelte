@@ -28,19 +28,19 @@
 						Search
 					</a>
 				{/if}
-				{#if pathName.includes('blog')}
+				{#if pathName.includes('unexplored')}
 					<a
 						href="/home/unexplored"
 						class="mr-4 text-base text-blue-200 underline hover:scale-110 hover:text-white"
 					>
-						Unlisted
+						Unexplored
 					</a>
 				{:else}
 					<a
 						href="/home/unexplored"
 						class="mr-4 text-base text-blue-200 hover:scale-110 hover:text-white"
 					>
-						Unlisted
+						Unexplored
 					</a>
 				{/if}
 			</div>

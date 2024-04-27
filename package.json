@@ -50,6 +50,7 @@
 		"lodash": "^4.17.21",
 		"postgres": "^3.4.4",
 		"quill": "1.3.6",
+		"svelte-loading-spinners": "^0.3.6",
 		"tsx": "^4.7.3"
 	}
 }

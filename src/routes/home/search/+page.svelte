@@ -531,14 +531,19 @@
 			lat = myLat;
 			lon = myLon;
 			placeId = myPlaceId;
+
+			address = null
 		} else {
 			lat = otherLat;
 			lon = otherLon;
 			placeId = otherPlaceId;
+
 		}
 
 		if (isSearchInALocation) {
 			searchType = 'city';
+
+			rng = null
 		} else {
 			searchType = 'radius';
 		}
