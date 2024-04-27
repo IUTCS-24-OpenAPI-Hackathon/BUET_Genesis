@@ -8,6 +8,8 @@
 	import type { ActionData, PageData } from './$types';
 	import deafaultImage from '$lib/images/default.jpg';
 	import { onMount } from 'svelte';
+	import BlogSVG from '$lib/components/blogSVG.svelte';
+	import { Circle } from 'svelte-loading-spinners';
 
 	export let data: PageData;
 	let features = data.res.features;
@@ -65,10 +67,12 @@
 	let weatherData: any = null;
 	let pollutionData: any = null;
 	let allReviews: any = null;
+	let allBlogs: any = null;
+
 	onMount(() => {
 		data.weatherData.then((res) => {
 			weatherData = res;
-			console.log(weatherData)
+			console.log(weatherData);
 		});
 
 		data.pollutionData.then((res) => {
@@ -77,6 +81,11 @@
 
 		data.allReviews.then((res) => {
 			allReviews = res;
+		});
+
+		data.allBlogs.then((res) => {
+			allBlogs = res;
+			console.log(allBlogs);
 		});
 	});
 
@@ -99,9 +108,21 @@
 				+ Add an experience here
 			</button>
 		{/if}
+		<a href="/home/travel/{slug}">
+			<button class="bg-orange-300 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded">
+				Travel
+			</button>
+		</a>
 	</div>
 	<div role="tablist" class="tabs tabs-bordered">
-		<input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Place Details"  checked/>
+		<input
+			type="radio"
+			name="my_tabs_1"
+			role="tab"
+			class="tab"
+			aria-label="Place Details"
+			checked
+		/>
 		<div role="tabpanel" class="tab-content p-10">
 			<div class="flex justify-center">
 				<div class="w-9/10 md:w-4/5 xl:w-4/5">
@@ -321,53 +342,55 @@
 					</form>
 					<div>
 						{#if allReviews}
-						{#each allReviews as review, index}
-							<div class="flex my-5">
-								<div class="mr-3 flex-shrink-0">
-									<img
-										class="mt-2 h-8 w-8 rounded-full sm:h-10 sm:w-10"
-										src={deafaultImage}
-										alt=""
-									/>
-								</div>
-								<div class="flex-1 rounded-lg border px-4 py-2 leading-relaxed sm:px-6 sm:py-4">
-									<strong>{review.reviewerName}</strong>
-									<span class="text-xs text-gray-400"
-										>{review.createdAt.toString().split('T')[0]}</span
-									>
-									<span class="flex flex-row">
-										{#each Array.from({ length: review.star }) as _, index}
-											<svg
-												class="star h-4 w-4 fill-current star-filled"
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 20 20"
-											>
-												<path
-													d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
-												/>
-											</svg>
-										{/each}
-										{#each Array.from({ length: 5 - review.star }) as _, index}
-											<svg
-												class="star h-4 w-4 fill-current star_"
-												xmlns="http://www.w3.org/2000/svg"
-												viewBox="0 0 20 20"
-											>
-												<path
-													d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
-												/>
-											</svg>
-										{/each}
-									</span>
+							{#each allReviews as review, index}
+								<div class="flex my-5">
+									<div class="mr-3 flex-shrink-0">
+										<img
+											class="mt-2 h-8 w-8 rounded-full sm:h-10 sm:w-10"
+											src={deafaultImage}
+											alt=""
+										/>
+									</div>
+									<div class="flex-1 rounded-lg border px-4 py-2 leading-relaxed sm:px-6 sm:py-4">
+										<strong>{review.reviewerName}</strong>
+										<span class="text-xs text-gray-400"
+											>{review.createdAt.toString().split('T')[0]}</span
+										>
+										<span class="flex flex-row">
+											{#each Array.from({ length: review.star }) as _, index}
+												<svg
+													class="star h-4 w-4 fill-current star-filled"
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 20 20"
+												>
+													<path
+														d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
+													/>
+												</svg>
+											{/each}
+											{#each Array.from({ length: 5 - review.star }) as _, index}
+												<svg
+													class="star h-4 w-4 fill-current star_"
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 20 20"
+												>
+													<path
+														d="M10 0l2.4 7.4H20l-6 4.6 2.3 7.4L10 15l-6 4.4 2.3-7.4-6-4.6h7.6L10 0z"
+													/>
+												</svg>
+											{/each}
+										</span>
 
-									<p class="text-sm mt-3">
-										{review.comment}
-									</p>
+										<p class="text-sm mt-3">
+											{review.comment}
+										</p>
+									</div>
 								</div>
-							</div>
-						{/each}
+							{/each}
 						{:else}
-
+						<div class="flex h-full w-full items-center justify-center">
+							<Circle size="60" color="#FF3E00" unit="px" duration="1s" />
+						</div>
 						{/if}
 					</div>
 				</div>
@@ -375,7 +398,47 @@
 		</div>
 
 		<input type="radio" name="my_tabs_1" role="tab" class="tab" aria-label="Blogs" />
-		<div role="tabpanel" class="tab-content p-10">Blogs</div>
+		<div role="tabpanel" class="tab-content p-10">
+			{#if allBlogs}
+				{#if allBlogs.length > 0}
+					{#each allBlogs as blog}
+						<div class="card card-side bg-base-100 shadow-xl border border-slate-100 p-5">
+							<figure><BlogSVG /></figure>
+							<div class="card-body">
+								<p class="font-bond text-3xl">{blog.blogTitle}</p>
+								<p><span class="font-medium">Writer:</span> {blog.writerName}</p>
+								<p><span class="font-medium">Created at:</span> {blog.createdAt.split('T')[0]}</p>
+								<p>
+									<span class="font-medium">Tags:</span>
+									{#each blog.tags.split(',') as tag}
+										<span
+											class="rounded-full px-2 py-1 text-sm transition-colors bg-gray-200 badge"
+										>
+											{tag}</span
+										>
+									{/each}
+								</p>
+								<div class="card-actions justify-end">
+									<a href="./{slug}/{blog.blogId}" target="_blank">
+										<button class="btn btn-primary">Read</button>
+									</a>
+								</div>
+							</div>
+						</div>
+					{/each}
+				{:else}
+					<div class="flex flex-col justify-center items-center">
+						<div class="text-xl mt-20 text-red-500 bg-red-200 rounded-xl p-3">
+							No blogs written yet
+						</div>
+					</div>
+				{/if}
+			{:else}
+			<div class="flex h-full w-full items-center justify-center">
+				<Circle size="60" color="#FF3E00" unit="px" duration="1s" />
+			</div>
+			{/if}
+		</div>
 	</div>
 </div>
 
