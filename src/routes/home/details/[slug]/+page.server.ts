@@ -70,8 +70,19 @@ export const load = async ({ locals: { supabase }, params, fetch }) => {
         return res
     }
 
+    async function getBlogData(){
+        const ret = await fetch('/api/blog/get-place-blog', {
+            method: 'POST',
+            body: JSON.stringify({ placeId: place_id })
+        });
+        const res = await ret.json()
+        return res
+    }
 
-    return { res, weatherData:getWeatherData(), pollutionData:getPollutionData(), allReviews:getReviewData() };
+
+    return { res, weatherData:getWeatherData(), pollutionData:getPollutionData(), allReviews:getReviewData() ,
+        allBlogs: getBlogData()
+    };
 }
 export const actions = {
     query: async (event) => {
