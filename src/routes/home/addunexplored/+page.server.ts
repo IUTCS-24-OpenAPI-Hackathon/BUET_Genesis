@@ -31,6 +31,7 @@ export const actions = {
         console.log("Form ACtions Details");
         const data = await event.request.formData();
         data.append('writerId', userNow.userId)
+        data.append('writerName', userNow.userName)
         // data.append('reviewerName', userNow.userName)
         // data.append('placeId', place_id)
 
