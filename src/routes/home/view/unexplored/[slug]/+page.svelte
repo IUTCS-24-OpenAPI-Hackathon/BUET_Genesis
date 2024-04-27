@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { Circle } from 'svelte-loading-spinners';
 	import type { PageData } from '../$types';
+	import 'leaflet/dist/leaflet.css';
+	import { browser } from '$app/environment';
 	export let data: PageData;
 
 	function formatDate(dateString) {
@@ -46,12 +48,55 @@
 	// let values = res.tags.split(',');
 
 	let currentBlog: any = null;
+
+	$: if (currentBlog) {
+		lat = currentBlog.lat;
+		lon = currentBlog.lon;
+		console.log(lat," ",lon)
+		func();
+	}
+
 	onMount(() => {
 		data.currentBlog.then((res) => {
 			currentBlog = res[0];
 			// console.log(res)
 		});
 	});
+
+	let lat = '';
+	let lon = '';
+
+	async function func() {
+		if (browser) {
+			const leaflet = await import('leaflet');
+
+			const myMap = leaflet.map('mapElement').setView([parseFloat(lat), parseFloat(lon)], 7);
+
+			leaflet
+				.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					// attribution:
+					// 	'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+					attribution: '&copy; OpenStreetMap contributors'
+				})
+				.addTo(myMap);
+
+			const marker = leaflet.icon({
+				iconUrl:
+					'https://fcqhfoxwjhdusijowxpj.supabase.co/storage/v1/object/public/static/marker.svg?t=2024-04-27T03%3A10%3A35.817Z',
+				iconSize: [40, 40],
+				iconAnchor: [15, 40],
+				popupAnchor: [0, -40]
+			});
+
+			leaflet
+				.marker([lat, lon], {
+					icon: marker
+				})
+				.addTo(myMap)
+				.bindPopup(`<b>${currentBlog.address}</b><br>Lat: ${lat}, Lon: ${lon}`)
+				.openPopup();
+		}
+	}
 </script>
 
 <div class="m-2 flex flex-row justify-between">
@@ -63,7 +108,9 @@
 </div>
 
 {#if currentBlog}
-	<main class="bg-[#f4f6f7]">
+	<div
+		class="mx-auto w-full max-w-screen-lg rounded-md border border-gray-300 bg-white p-10 shadow-md m-10"
+	>
 		<div class="flex flex-col ml-4 mr-4 mt-10 items-center">
 			<h1 class="font-extrabold text-5xl">
 				{currentBlog.name}
@@ -92,15 +139,16 @@
 					Latitude: {currentBlog.lat}
 				</p>
 				<p>
-					Latitude: {currentBlog.lon}
+					Longitude: {currentBlog.lon}
 				</p>
 			</div>
 		</div>
 		<div class="mt-16 ml-24 mr-24">
 			{@html currentBlog.content}
 		</div>
-	</main>
+	</div>
 
+	<div id="mapElement" style="height: 500px;" class="rounded-lg shadow-md ml-10 mr-10 my-6" />
 	<style>
 		.chipi {
 			background-color: #c1d4e3;

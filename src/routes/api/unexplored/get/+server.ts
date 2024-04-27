@@ -7,7 +7,7 @@ export const POST: RequestHandler = async (event) => {
     // console.log(data.placeId)
     const res = await getSpecExplored(data.blogId)
 
-    console.log(res);
+    // console.log(res);
     return new Response(
         JSON.stringify(res)
     )
